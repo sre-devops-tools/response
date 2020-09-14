@@ -11,6 +11,7 @@ virtual-env
 *.env
 /src/
 dist/
+env
 
 *.egg-info/
 .idea
