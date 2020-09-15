@@ -1,0 +1,10 @@
+FROM python:3.8
+
+WORKDIR /code
+COPY . /code
+
+RUN pip install pipenv
+RUN pipenv install --system --deploy --ignore-pipfile
+RUN python ./setup.py install
+
+CMD [ "python", "./manage.py", "runserver", "8000"]
