@@ -17,7 +17,7 @@ from django.core.exceptions import ImproperlyConfigured
 from response.slack.client import SlackClient
 
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv(verbose=True)
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +62,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "demo.urls"
+ROOT_URLCONF = "urls"
 
 TEMPLATES = [
     {
@@ -80,7 +80,7 @@ TEMPLATES = [
     }
 ]
 
-WSGI_APPLICATION = "demo.wsgi.application"
+WSGI_APPLICATION = "wsgi.application"
 
 
 # Database

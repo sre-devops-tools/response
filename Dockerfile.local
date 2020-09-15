@@ -3,8 +3,11 @@ FROM python:3.8
 WORKDIR /code
 COPY . /code
 
+RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /bin/wait-for-it.sh && chmod a+x /bin/wait-for-it.sh
+
+
 RUN pip install pipenv
 RUN pipenv install --system --deploy --ignore-pipfile
 RUN python ./setup.py install
 
-CMD [ "python", "./manage.py", "runserver", "8000"]
+CMD [ "python", "./manage.py", "runserver", "0.0.0.0:8000"]
