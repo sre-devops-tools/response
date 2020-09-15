@@ -14,6 +14,8 @@ services:
       - ./:/code
     stdin_open: true
     tty: true
+    depends_on: 
+      - db
 
   # cron:
   #   build:
@@ -25,13 +27,13 @@ services:
   #     - response
   #   tty: true
 
-  # db:
-  #   image: "postgres:11.2"
-  #   container_name: postgres
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data/
+  db:
+    image: "postgres:11.2"
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
 
   # ngrok:
   #   image: gtriggiano/ngrok-tunnel
@@ -43,3 +45,6 @@ services:
   #     - "4040:4040"
   #   depends_on:
   #     - response
+
+volumes:
+  postgres_data:
