@@ -74,7 +74,7 @@ class SlackClient(object):
         logger.info(f"Getting user ID for {name}")
         response = self.users_list()
         for user in response["members"]:
-            if user["name"] == name:
+            if "real_name" in user and  user["real_name"] == name:
                 return user["id"]
         raise SlackError(f"User '{name}' not found")
 
