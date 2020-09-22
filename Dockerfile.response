@@ -1,14 +1,14 @@
-FROM python:3.7-slim
+FROM python:3.8
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    netcat \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /code
+COPY . /code
 
-WORKDIR /app
-COPY requirements.txt /app
-RUN pip install -r requirements.txt
+RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /bin/wait-for-it.sh && chmod a+x /bin/wait-for-it.sh
 
-COPY . /app/
 
-ENTRYPOINT ["python", "manage.py"]
-CMD ["runserver", "0.0.0.0:8000"]
+RUN pip install pipenv
+RUN pipenv install --system --deploy --ignore-pipfile
+RUN python ./setup.py install
+
+ENTRYPOINT [ "python", "/manage.py" ]
+CMD [ "runserver", "0.0.0.0:8000"]
