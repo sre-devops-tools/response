@@ -4,8 +4,8 @@ on:
     branches:
       - master
 
-  env:
-    IMAGE_NAME: response
+env:
+  IMAGE_NAME: response
 
 jobs:
   push:
