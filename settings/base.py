@@ -14,9 +14,10 @@ import logging
 import os
 
 from django.core.exceptions import ImproperlyConfigured
+from dotenv import load_dotenv
+
 from response.slack.client import SlackClient
 
-from dotenv import load_dotenv
 load_dotenv(verbose=True)
 
 logger = logging.getLogger(__name__)

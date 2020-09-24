@@ -11,6 +11,7 @@ Django = "==2.2.13"
 python-dotenv = "*"
 slackclient = "<2"
 ipython = "*"
+isort = "*"
 
 [requires]
 python_version = "3.8"

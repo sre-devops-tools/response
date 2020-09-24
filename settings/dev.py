@@ -1,5 +1,7 @@
 import os
+
 from dotenv import load_dotenv
+
 from .base import *  # noqa: F401, F403
 from .base import SLACK_CLIENT, get_env_var
 

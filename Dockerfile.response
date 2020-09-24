@@ -11,4 +11,4 @@ RUN pipenv install --system --deploy --ignore-pipfile
 RUN python ./setup.py install
 
 EXPOSE 8000
-CMD [ "entrypoint.sh" ]
+CMD [ "/code/entrypoint.sh" ]
