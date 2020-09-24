@@ -12,5 +12,5 @@ RUN python ./setup.py install
 
 EXPOSE 8000
 
-ENTRYPOINT [ "python", "/manage.py" ]
+ENTRYPOINT [ "python", "/code/manage.py" ]
 CMD [ "runserver", "0.0.0.0:8000"]
