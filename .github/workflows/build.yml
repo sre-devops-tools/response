@@ -37,12 +37,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_push
-    
+
     steps:
-      - name: AWS Elastic Beanstalk cli
-        uses: hmanzur/actions-aws-eb@v1.0.0
+      - name: Redeploy beanstalk
+        uses: ItsKarma/aws-cli@v1.70.0
         with:
-          command: 'deploy ${{ secrets.ENVIRONMENT_NAME }}'
+          args: elasticbeanstalk update-environment --application-name response-dev --environment-name response-dev-env --version-label response-ebs-version
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
