@@ -6,7 +6,7 @@ on:
 
 env:
   IMAGE_NAME: response
-  IMAGE_ID: ${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_REPOSITORY_NAME }}/${IMAGE_NAME}
+  IMAGE_ID: ${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_REPOSITORY_NAME }}/response
 
 jobs:
   build_and_push:
