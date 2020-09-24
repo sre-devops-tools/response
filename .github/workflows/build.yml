@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build image
-        run: docker build . --file Dockerfile.response --tag $IMAGE_ID
+        run: docker build . --file Dockerfile.response --tag $IMAGE_ID:${GITHUB_SHA:0:5}
 
       - name: DockerHub login
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ secrets.DOCKER_REGISTRY_URL }} -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
