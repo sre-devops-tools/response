@@ -12,6 +12,7 @@ python-dotenv = "*"
 slackclient = "<2"
 ipython = "*"
 isort = "*"
+uwsgi = "*"
 
 [requires]
 python_version = "3.8"
