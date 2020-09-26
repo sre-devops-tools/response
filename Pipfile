@@ -6,13 +6,22 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-psycopg2-binary = "==2.8.2"
-Django = "==2.2.13"
+psycopg2-binary = "==2.8.6"
+Django = "==3.1.1"
 python-dotenv = "*"
-slackclient = "<2"
-ipython = "*"
+slackclient = "~=1.3"
 isort = "*"
 uwsgi = "*"
+slugify = "*"
+django-after-response = ">=0.2.2"
+djangorestframework = ">=3.11"
+django-bootstrap4 = ">=2.2"
+bleach = "~=3.2.1"
+bleach-whitelist = ">=0.0.10"
+jsonfield = "~=3.1.0"
+emoji-data-python = "==1.4.2"
+statuspageio = ">=0.0.1"
+markdown2 = ">=2.3.9"
 
 [requires]
 python_version = "3.8"

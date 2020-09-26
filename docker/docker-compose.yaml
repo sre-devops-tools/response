@@ -3,8 +3,8 @@ services:
 
   response:
     build:
-      context: .
-      dockerfile: Dockerfile.local
+      context: ..
+      dockerfile: docker/Dockerfile.local
     image: response
     container_name: response
     command:
@@ -17,9 +17,9 @@ services:
       - 0.0.0.0:8000
     ports:
       - "8000:8000"
-    env_file: .env
+    env_file: ../.env
     volumes:
-      - ./:/code
+      - ../:/code
     stdin_open: true
     tty: true
     depends_on: 
@@ -28,8 +28,8 @@ services:
 
   migrations:
     build:
-      context: .
-      dockerfile: Dockerfile.local
+      context: ..
+      dockerfile: docker/Dockerfile.local
     image: response
     container_name: migrations
     command:
@@ -39,13 +39,12 @@ services:
       - python
       - ./manage.py
       - migrate
-    env_file: .env
+    env_file: ../.env
     volumes:
-      - ./:/code
+      - ../:/code
     tty: true
     depends_on: 
       - db
-
 
   db:
     image: "postgres:11.2"
@@ -54,11 +53,9 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+    environment:
+      POSTGRES_PASSWORD: root
+
   # ngrok:
   #   image: gtriggiano/ngrok-tunnel
   #   container_name: ngrok
