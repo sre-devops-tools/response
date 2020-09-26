@@ -8,7 +8,6 @@ RUN chmod a+x /code/entrypoint.sh
 
 RUN pip install pipenv
 RUN pipenv install --system --deploy --ignore-pipfile
-RUN python ./setup.py install
 
 EXPOSE 8000
 CMD [ "/code/entrypoint.sh" ]
