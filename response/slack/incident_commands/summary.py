@@ -3,8 +3,10 @@ import logging
 
 from response.core.models import Incident
 from response.slack import block_kit, dialog_builder
-from response.slack.decorators import ActionContext, action_handler, dialog_handler
-from response.slack.decorators.incident_command import __default_incident_command
+from response.slack.decorators import (ActionContext, action_handler,
+                                       dialog_handler)
+from response.slack.decorators.incident_command import \
+    __default_incident_command
 from response.slack.models import CommsChannel
 
 logger = logging.getLogger(__name__)

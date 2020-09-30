@@ -8,19 +8,10 @@ from django.views.decorators.csrf import csrf_exempt
 from response.core.models.incident import Incident
 from response.slack.authentication import slack_authenticate
 from response.slack.cache import update_user_cache
-from response.slack.decorators import (
-    handle_action,
-    handle_dialog,
-    handle_event,
-    handle_notifications,
-)
-from response.slack.dialog_builder import (
-    Dialog,
-    SelectFromUsers,
-    SelectWithOptions,
-    Text,
-    TextArea,
-)
+from response.slack.decorators import (handle_action, handle_dialog,
+                                       handle_event, handle_notifications)
+from response.slack.dialog_builder import (Dialog, SelectFromUsers,
+                                           SelectWithOptions, Text, TextArea)
 from response.slack.settings import INCIDENT_REPORT_DIALOG
 
 logger = logging.getLogger(__name__)
@@ -158,18 +149,4 @@ def event(request):
         # the request
         return HttpResponse(payload["challenge"])
 
-    return HttpResponse()
-
-
-@csrf_exempt
-def cron_minute(request):
-    "Handles actions that need to take place every minute"
-    handle_notifications()
-    return HttpResponse()
-
-
-@csrf_exempt
-def cron_daily(request):
-    "Handles actions that need to take place every day"
-    update_user_cache()
     return HttpResponse()

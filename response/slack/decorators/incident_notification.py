@@ -62,7 +62,7 @@ def recurring_notification(interval_mins, max_notifications=1):
 
 
 def handle_notifications():
-
+    print("Handling notifications")
     # Only notify open incidents with a comms channel
     open_incidents = Incident.objects.filter(
         end_time__isnull=True, commschannel__incident__isnull=False

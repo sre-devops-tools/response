@@ -3,13 +3,8 @@ from datetime import datetime
 
 from response.core.models.incident import Incident
 from response.slack.decorators import ActionContext, action_handler
-from response.slack.dialog_builder import (
-    Dialog,
-    SelectFromUsers,
-    SelectWithOptions,
-    Text,
-    TextArea,
-)
+from response.slack.dialog_builder import (Dialog, SelectFromUsers,
+                                           SelectWithOptions, Text, TextArea)
 from response.slack.models import CommsChannel, HeadlinePost
 from response.slack.settings import INCIDENT_EDIT_DIALOG
 

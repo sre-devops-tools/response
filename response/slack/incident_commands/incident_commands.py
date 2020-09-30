@@ -5,9 +5,7 @@ from response.core.models import Action, ExternalUser, Incident
 from response.slack.cache import get_user_profile
 from response.slack.client import SlackError
 from response.slack.decorators.incident_command import (
-    __default_incident_command,
-    get_help,
-)
+    __default_incident_command, get_help)
 from response.slack.models import CommsChannel
 from response.slack.reference_utils import reference_to_id
 

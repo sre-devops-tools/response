@@ -1,17 +1,10 @@
 import pytest
 
 from response.core.models import ExternalUser
-from response.slack.cache import (
-    get_user_profile,
-    get_user_profile_by_email,
-    update_user_cache,
-)
-from tests.slack.slack_payloads import (
-    users_list_new,
-    users_list_page_1,
-    users_list_page_2,
-    users_list_response,
-)
+from response.slack.cache import (get_user_profile, get_user_profile_by_email,
+                                  update_user_cache)
+from tests.slack.slack_payloads import (users_list_new, users_list_page_1,
+                                        users_list_page_2, users_list_response)
 
 
 @pytest.mark.django_db

@@ -1,12 +1,7 @@
 from django.contrib import admin
 
-from response.slack.models import (
-    CommsChannel,
-    HeadlinePost,
-    Notification,
-    PinnedMessage,
-    UserStats,
-)
+from response.slack.models import (CommsChannel, HeadlinePost, Notification,
+                                   PinnedMessage, UserStats)
 
 # Register your models here.
 admin.site.register(HeadlinePost)

@@ -1,15 +1,10 @@
 from django.conf.urls import include, url
 from rest_framework import routers
 
-from response.core.views import (
-    ActionViewSet,
-    EventsViewSet,
-    ExternalUserViewSet,
-    IncidentActionViewSet,
-    IncidentsByMonthViewSet,
-    IncidentTimelineEventViewSet,
-    IncidentViewSet,
-)
+from response.core.views import (ActionViewSet, EventsViewSet,
+                                 ExternalUserViewSet, IncidentActionViewSet,
+                                 IncidentsByMonthViewSet,
+                                 IncidentTimelineEventViewSet, IncidentViewSet)
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()

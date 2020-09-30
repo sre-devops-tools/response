@@ -3,11 +3,8 @@ import logging
 import re
 
 from response.core.models.incident import Incident
-from response.slack.decorators import (
-    handle_incident_command,
-    handle_keywords,
-    slack_event,
-)
+from response.slack.decorators import (handle_incident_command,
+                                       handle_keywords, slack_event)
 from response.slack.models import CommsChannel, PinnedMessage, UserStats
 
 logger = logging.getLogger(__name__)
