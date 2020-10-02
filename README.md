@@ -1,5 +1,13 @@
-## Local development
+# NAME
+prod description
 
+## Documentation
+
+### Installation
+* [Slack configuration](docs/slack.md)
+
+
+## Local development
 
 ```
 $ cd docker/

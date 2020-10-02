@@ -1,8 +1,31 @@
-# Configuring your Slack app
+# Slack configuration
+
+## Creating your Slack App
+
+- Navigate to [https://api.slack.com/apps](https://api.slack.com/apps) and click `Create New App`.
+- Give it a name, e.g. 'Response', and select the relevant workspace.
+
+- In the OAuth and Permissions page, scroll down to Bot Token Scopes.
+
+- Add the following scopes:
+  - `app_mentions:read`
+  - `channels:history`
+  - `channels:join`
+  - `channels:manage`
+  - `channels:read`
+  - `chat:write`
+  - `chat:write.public`
+  - `reactions:write`
+  - `users:read`
+  - `users:read.email`
+
+- At the top of the page, the `Install App to Workspace` button is now available.  Click it!
+
+## Configuring your Slack app
 
 The steps here outline how to complete the Slack side setup for Response.  The app will need to be running, and accessible on a public domain to complete these steps as Slack validates the URL before it'll accept the change.
 
-## Slash Command
+### Slash Command
 
 - In the Slash commands page click `Create New Command`.
 
@@ -12,7 +35,7 @@ The steps here outline how to complete the Slack side setup for Response.  The a
   - Short Description: `Trigger an incident`
   - Usage Hint: `What's the problem?`
 
-## Event Subscriptions
+### Event Subscriptions
 
 **Important** You need to have the server running and available to setup events, as Slack sends a challenge request to this address and expects a specific response.
 
@@ -28,11 +51,11 @@ In the Event Subscriptions page we need to configure the following:
   - `message.channels`
   - `channel_rename`
 
-## Configure interactive components
+### Configure interactive components
 
 - In the Interactive Components page, enable and set the URL to `https://<public-url>/slack/action`.
 
 
-## Reinstall App
+### Reinstall App
 
 With these changes made, you'll need to reinstall the app to your workspace. There should be a bar at the top with a link, but if not you can find the resinstall link in the OAuth & Permissions page.
