@@ -195,7 +195,7 @@ def get_env_var(setting, warn_only=False):
 
 SLACK_TOKEN = get_env_var("SLACK_TOKEN")
 SLACK_CLIENT = SlackClient(SLACK_TOKEN)
-
+SLACK_SLASH_COMMAND = "incident"
 
 # Whether to use https://pypi.org/project/bleach/ to strip potentially dangerous
 # HTML input in string fields

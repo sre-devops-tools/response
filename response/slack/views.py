@@ -7,12 +7,16 @@ from django.views.decorators.csrf import csrf_exempt
 
 from response.core.models.incident import Incident
 from response.slack.authentication import slack_authenticate
-from response.slack.cache import update_user_cache
+from response.slack.cache import get_user_profile, update_user_cache
 from response.slack.decorators import (handle_action, handle_dialog,
-                                       handle_event, handle_notifications)
+                                       handle_event, handle_incident_command,
+                                       handle_notifications)
+from response.slack.decorators.incident_command import (get_commands,
+                                                        get_create_help)
 from response.slack.dialog_builder import (Dialog, SelectFromUsers,
                                            SelectWithOptions, Text, TextArea)
-from response.slack.settings import INCIDENT_REPORT_DIALOG
+from response.slack.settings import (INCIDENT_CREATE_SLUG,
+                                     INCIDENT_REPORT_DIALOG)
 
 logger = logging.getLogger(__name__)
 
@@ -32,69 +36,94 @@ def slash_command(request):
 
     user_id = request.POST.get("user_id")
     trigger_id = request.POST.get("trigger_id")
-    report = request.POST.get("text")
+    channel_id = request.POST.get("channel_id")
 
-    dialog = Dialog(
-        title="Report an Incident",
-        submit_label="Report",
-        elements=[
-            Text(
-                label="Title",
-                name="report",
-                placeholder="What's happened, in a sentence?",
-                value=report,
+    text = request.POST.get("text").split(" ")
+    command_name = text.pop(0)
+    message = " ".join(text)
+
+    if command_name == INCIDENT_CREATE_SLUG:
+        name = get_user_profile(user_id)["name"]
+
+        dialog = Dialog(
+            title="Report an Incident",
+            submit_label="Report",
+            elements=[
+                Text(
+                    label="Title",
+                    name="report",
+                    placeholder="What's happened, in a sentence?",
+                    value=message,
+                )
+            ],
+        )
+
+        if hasattr(settings, "INCIDENT_REPORT_CHANNEL_ID"):
+            dialog.add_element(
+                SelectWithOptions(
+                    [
+                        ("Yes - this is a live incident happening right now", "live"),
+                        (
+                            "No - this is just a report of something that happened",
+                            "report",
+                        ),
+                    ],
+                    label="Is this a live incident?",
+                    name="incident_type",
+                    optional=False,
+                )
             )
-        ],
-    )
 
-    if hasattr(settings, "INCIDENT_REPORT_CHANNEL_ID"):
+        dialog.add_element(
+            TextArea(
+                label="Summary",
+                name="summary",
+                optional=True,
+                placeholder="Can you share any more details?",
+            )
+        )
+
+        dialog.add_element(
+            TextArea(
+                label="Impact",
+                name="impact",
+                optional=True,
+                placeholder="Who or what might be affected?",
+                hint="Think about affected people, systems, and processes",
+            )
+        )
+
+        dialog.add_element(SelectFromUsers(label="Lead", name="lead", optional=True))
+
         dialog.add_element(
             SelectWithOptions(
-                [
-                    ("Yes - this is a live incident happening right now", "live"),
-                    ("No - this is just a report of something that happened", "report"),
-                ],
-                label="Is this a live incident?",
-                name="incident_type",
-                optional=False,
+                [(s.capitalize(), i) for i, s in Incident.SEVERITIES],
+                label="Severity",
+                name="severity",
+                optional=True,
             )
         )
 
-    dialog.add_element(
-        TextArea(
-            label="Summary",
-            name="summary",
-            optional=True,
-            placeholder="Can you share any more details?",
+        dialog.send_open_dialog(INCIDENT_REPORT_DIALOG, trigger_id)
+        logger.info(
+            f"Handling Slack slash command for user {user_id}, command {command_name} - opening dialog"
         )
-    )
 
-    dialog.add_element(
-        TextArea(
-            label="Impact",
-            name="impact",
-            optional=True,
-            placeholder="Who or what might be affected?",
-            hint="Think about affected people, systems, and processes",
+    elif command_name not in get_commands():
+        settings.SLACK_CLIENT.send_ephemeral_message(
+            channel_id,
+            user_id,
+            get_create_help(),
         )
-    )
-
-    dialog.add_element(SelectFromUsers(label="Lead", name="lead", optional=True))
-
-    dialog.add_element(
-        SelectWithOptions(
-            [(s.capitalize(), i) for i, s in Incident.SEVERITIES],
-            label="Severity",
-            name="severity",
-            optional=True,
+    else:
+        handle_incident_command(
+            command_name=command_name,
+            message=message,
+            user_id=user_id,
+            channel_id=channel_id,
+            thread_ts=None,
         )
-    )
 
-    logger.info(
-        f"Handling Slack slash command for user {user_id}, report {report} - opening dialog"
-    )
-
-    dialog.send_open_dialog(INCIDENT_REPORT_DIALOG, trigger_id)
     return HttpResponse()
 
 

@@ -22,6 +22,17 @@ def get_help():
     return rendered
 
 
+def get_create_help():
+    """
+    get_create_help returns the help string for the main channel
+    """
+    rendered = (
+        "This is not an incident channel, from here, you should invoke `/%s create something is going bad`, to start an incident report."
+        % settings.SLACK_SLASH_COMMAND
+    )
+    return rendered
+
+
 def get_commands():
     return COMMAND_MAPPINGS.keys()
 
@@ -88,8 +99,11 @@ def handle_incident_command(command_name, message, thread_ts, channel_id, user_i
     """
     Handler for app mention events of the format @<bot> <command> <extra text>
 
-    @param payload an app mention string of the form @incident summary Something's happened
+    @param payload an app mention string of the form @incident summary Something's happenedl
     """
+    # try to join the conversation if the bot is not already in the channel.
+    settings.SLACK_CLIENT.join_channel(channel_id=channel_id)
+
     if (
         command_name not in COMMAND_MAPPINGS
         and command_name not in COMMAND_MAPPINGS_CUSTOM
@@ -98,6 +112,11 @@ def handle_incident_command(command_name, message, thread_ts, channel_id, user_i
             channel_id,
             user_id,
             "I'm sorry, I don't know how to help with that :grimacing:",
+        )
+        settings.SLACK_CLIENT.send_ephemeral_message(
+            channel_id,
+            user_id,
+            get_help(),
         )
 
         react_not_ok(channel_id, thread_ts)
@@ -130,6 +149,7 @@ def handle_incident_command(command_name, message, thread_ts, channel_id, user_i
 
     except CommsChannel.DoesNotExist:
         logger.error("No matching incident found for this channel")
+        settings.SLACK_CLIENT.send_message(comms_channel.channel_id, get_create_help())
     except Exception as e:
         logger.error(f"Error handling incident command {command_name} {message}: {e}")
         raise

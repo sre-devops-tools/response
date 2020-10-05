@@ -7,8 +7,8 @@ class ResponseConfig(AppConfig):
 
     def ready(self):
         from .core import signals as core_signals  # noqa: F401
-        from .slack import (action_handlers, dialog_handlers,  # noqa: F401
-                            event_handlers, incident_commands,
+        from .slack import dialog_handlers  # noqa: F401
+        from .slack import (action_handlers, event_handlers, incident_commands,
                             incident_notifications, settings, signals, updater)
 
         site_settings.RESPONSE_LOGIN_REQUIRED = getattr(
