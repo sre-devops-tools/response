@@ -24,6 +24,7 @@ statuspageio = ">=0.0.1"
 markdown2 = ">=2.3.9"
 apscheduler = "*"
 black = "*"
+django-celery-beat = "*"
 
 [requires]
 python_version = "3.8"
