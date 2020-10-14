@@ -71,7 +71,7 @@ def handle_notifications():
     )
     current_topic = settings.SLACK_CLIENT.get_channel_topic(settings.INCIDENT_CHANNEL_ID)
     new_topic = "Open Incident(s): " + str(Incident.objects.filter(
-        end_time__isnull=True).count())
+        end_time__isnull=True).count()) + "- "+ settings.SITE_URL
     if current_topic != new_topic:
         settings.SLACK_CLIENT.set_channel_topic(
                     settings.INCIDENT_CHANNEL_ID, new_topic
