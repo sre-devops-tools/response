@@ -90,6 +90,15 @@ class SlackClient(object):
             if e.slack_error == "channel_not_found":
                 return None
             raise
+    
+    def get_channel_topic(self, id_):
+        try:
+            response = self.api_call("conversations.info", channel=id_)
+            return response["channel"]["topic"]["value"]
+        except SlackError as e:
+            if e.slack_error == "channel_not_found":
+                return None
+            raise
 
     def get_channel_id(self, name, auto_unarchive=False):
         logger.info(f"Getting channel ID for {name}")

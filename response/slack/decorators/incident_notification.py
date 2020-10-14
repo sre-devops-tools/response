@@ -1,6 +1,8 @@
 import logging
 from datetime import datetime
 
+from django.conf import settings
+
 from response.core.models import Incident
 from response.slack.models.notification import Notification
 
@@ -67,6 +69,12 @@ def handle_notifications():
     open_incidents = Incident.objects.filter(
         end_time__isnull=True, commschannel__incident__isnull=False
     )
+    current_topic = settings.SLACK_CLIENT.get_channel_topic(settings.INCIDENT_CHANNEL_ID)
+    new_topic = "Open Incident(s): " + str(open_incidents.count())
+    if current_topic != new_topic:
+        settings.SLACK_CLIENT.set_channel_topic(
+                    settings.INCIDENT_CHANNEL_ID, new_topic
+                )
 
     for incident in open_incidents:
         for handler in NOTIFICATION_HANDLERS:
