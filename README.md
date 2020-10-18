@@ -26,6 +26,10 @@ $ docker-compose exec response python manage.py createsuperuser
 ```
 And follow the prompts.
 
+### Run migrations
+```
+docker-compose exec response python manage.py
+```
 
 ### Clean up database
 If you want to start fresh, run:
