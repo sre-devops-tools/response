@@ -5,7 +5,6 @@ from typing import List
 from .client import ZoomClient
 from .settings import ZOOM_API_KEY, ZOOM_API_SECRET, ZOOM_API_USER_ID
 
-
 log = logging.getLogger(__name__)
 
 
