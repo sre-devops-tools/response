@@ -5,6 +5,7 @@ prod description
 
 ### Installation
 * [Slack configuration](docs/slack.md)
+* [Zoom configuration](docs/zoom.md)
 
 
 ## Local development
