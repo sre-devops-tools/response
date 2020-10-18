@@ -9,6 +9,13 @@ prod description
 
 ## Local development
 
+### Configure the env file
+
+```
+$ cp env.example .env
+```
+Replace the default values by the ones in Slack.
+
 ```
 $ cd docker/
 $ docker-compose build
