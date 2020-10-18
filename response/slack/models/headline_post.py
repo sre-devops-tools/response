@@ -13,7 +13,7 @@ from response.slack.decorators.headline_post_action import (
     SLACK_HEADLINE_POST_ACTION_MAPPINGS, headline_post_action)
 from response.slack.models.comms_channel import CommsChannel
 from response.slack.reference_utils import channel_reference, user_reference
-
+from response.zoom.models import Meeting
 logger = logging.getLogger(__name__)
 
 
@@ -29,6 +29,7 @@ class HeadlinePost(models.Model):
     EDIT_INCIDENT_BUTTON = "edit-incident-button"
     CLOSE_INCIDENT_BUTTON = "close-incident-button"
     CREATE_COMMS_CHANNEL_BUTTON = "create-comms-channel-button"
+    CREATE_ZOOM_MEETING_BUTTON = "create-zoom-meeting-button"
     PAGE_ON_CALL_BUTTON = "page-on-call-button"
 
     objects = HeadlinePostManager()
@@ -36,6 +37,9 @@ class HeadlinePost(models.Model):
     message_ts = models.CharField(max_length=20, null=True)
     comms_channel = models.OneToOneField(
         CommsChannel, on_delete=models.DO_NOTHING, null=True
+    )
+    zoom_meeting = models.OneToOneField(
+        Meeting, on_delete=models.DO_NOTHING, null=True
     )
 
     def update_in_slack(self):
@@ -121,6 +125,19 @@ class HeadlinePost(models.Model):
                     )
                 )
 
+        if not self.incident.report_only:
+            zoom_ref = (
+                self.zoom_meeting.weblink
+                if self.zoom_meeting
+                else None
+            )
+            if zoom_ref:
+                msg.add_block(
+                    Section(
+                        block_id="zoom_meeting",
+                        text=Text(f":telephone_receiver: Zoom Meeting: {zoom_ref or '-'}"),
+                    )
+                )
         # Add buttons (if the incident is open)
         if not self.incident.is_closed():
             msg.add_block(Section(text=Text("Need something else?")))
@@ -180,6 +197,20 @@ def create_comms_channel_action(headline_post):
     return Button(
         ":speaking_head_in_silhouette: Create Comms Channel",
         HeadlinePost.CREATE_COMMS_CHANNEL_BUTTON,
+        value=headline_post.incident.pk,
+    )
+
+@headline_post_action(order=150)
+def create_zoom_meeting(headline_post):
+    if headline_post.incident.report_only:
+        # Reports don't link to zoom meeting
+        return None
+    if headline_post.zoom_meeting:
+        # No need to create an action, channel already exists
+        return None
+    return Button(
+        ":telephone_receiver: Create Zoom Meeting",
+        HeadlinePost.CREATE_ZOOM_MEETING_BUTTON,
         value=headline_post.incident.pk,
     )
 

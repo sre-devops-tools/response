@@ -200,3 +200,7 @@ SLACK_SLASH_COMMAND = "incident"
 # Whether to use https://pypi.org/project/bleach/ to strip potentially dangerous
 # HTML input in string fields
 RESPONSE_SANITIZE_USER_INPUT = True
+
+ZOOM_API_KEY = get_env_var("ZOOM_API_KEY")
+ZOOM_API_SECRET = get_env_var("ZOOM_API_SECRET")
+ZOOM_API_USER_ID = get_env_var("ZOOM_API_USER_ID")

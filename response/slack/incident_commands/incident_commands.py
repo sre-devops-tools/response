@@ -6,9 +6,12 @@ from response.slack.cache import get_user_profile
 from response.slack.client import SlackError
 from response.slack.decorators.incident_command import (
     __default_incident_command, get_help)
-from response.slack.models import CommsChannel
+from response.slack.models import CommsChannel, HeadlinePost
 from response.slack.reference_utils import reference_to_id
+from response.zoom.zoom import Zoom
+from response.zoom.models import Meeting
 
+from django.core.exceptions import ObjectDoesNotExist
 logger = logging.getLogger(__name__)
 
 
@@ -92,4 +95,22 @@ def set_action(incident: Incident, user_id: str, message: str):
         external_id=user_id, display_name=name
     )
     Action(incident=incident, details=message, user=action_reporter).save()
+    return True, None
+
+
+@__default_incident_command(["zoom"], helptext="Creates a zoom meeting")
+def create_zoom(incident: Incident, user_id: str, message: str):
+    try:
+        m = incident.zoom_meeting()
+    except ObjectDoesNotExist:
+        m = Meeting.objects.create_meeting(incident)
+        # Update the headline post here too
+        h = HeadlinePost.objects.get(incident=incident)
+        h.zoom_meeting = m
+        h.save()
+        h.update_in_slack()
+
+    comms_channel = CommsChannel.objects.get(incident=incident)
+    comms_channel.post_in_channel(f"You can join the zoom meeting here {m.weblink} with password `{m.challenge}`")
+    
     return True, None
