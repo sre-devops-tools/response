@@ -1,9 +1,8 @@
 import json
 import time
 
-from jose import jwt
 import requests
-
+from jose import jwt
 
 API_BASE_URI = "https://api.zoom.us/v2"
 

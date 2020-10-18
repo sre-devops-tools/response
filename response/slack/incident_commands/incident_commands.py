@@ -8,7 +8,7 @@ from response.slack.decorators.incident_command import (
     __default_incident_command, get_help)
 from response.slack.models import CommsChannel
 from response.slack.reference_utils import reference_to_id
-
+from response.zoom.zoom import Zoom
 logger = logging.getLogger(__name__)
 
 
@@ -93,3 +93,14 @@ def set_action(incident: Incident, user_id: str, message: str):
     )
     Action(incident=incident, details=message, user=action_reporter).save()
     return True, None
+
+
+@__default_incident_command(["zoom"], helptext="Creates a zoom meeting")
+def create_zoom(incident: Incident, user_id: str, message: str):
+    zoom = Zoom().create("Incident #%s meeting" % incident, incident.summary, "", [])
+    comms_channel = CommsChannel.objects.get(incident=incident)
+    comms_channel.post_in_channel(
+        f"Please join the zoom meeting: {zoom['weblink']}, password: `{zoom['challenge']}`"
+    )
+
+    return True,None

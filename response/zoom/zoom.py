@@ -2,9 +2,9 @@ import logging
 import random
 from typing import List
 
-
-from .settings import ZOOM_API_USER_ID, ZOOM_API_KEY, ZOOM_API_SECRET
 from .client import ZoomClient
+from .settings import ZOOM_API_KEY, ZOOM_API_SECRET, ZOOM_API_USER_ID
+
 
 log = logging.getLogger(__name__)
 
@@ -31,7 +31,9 @@ def create_meeting(
     """Create a Zoom Meeting."""
     body = {
         "topic": title if title else f"Situation Room for {name}",
-        "agenda": description if description else f"Situation Room for {name}. Please join.",
+        "agenda": description
+        if description
+        else f"Situation Room for {name}. Please join.",
         "duration": duration,
         "password": gen_conference_challenge(8),
         "settings": {"join_before_host": True},
@@ -41,14 +43,21 @@ def create_meeting(
 
 
 class Zoom:
+    def __init__(self):
+        self.client = ZoomClient(ZOOM_API_KEY, ZOOM_API_SECRET)
 
     def create(
-        self, name: str, description: str = None, title: str = None, participants: List[str] = []
+        self,
+        name: str,
+        description: str = None,
+        title: str = None,
+        participants: List[str] = [],
     ):
         """Create a new event."""
-        client = ZoomClient(ZOOM_API_KEY, str(ZOOM_API_SECRET))
 
-        conference_response = create_meeting(client, name, description=description, title=title)
+        conference_response = create_meeting(
+            self.client, name, description=description, title=title
+        )
 
         conference_json = conference_response.json()
 

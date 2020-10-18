@@ -2,10 +2,9 @@ from datetime import datetime
 
 from django.db import models
 
-from response import core, slack
+from response import core, slack, zoom
 from response.core.models.user_external import ExternalUser
 from response.core.util import sanitize
-
 
 class IncidentManager(models.Manager):
     def create_incident(
@@ -18,8 +17,7 @@ class IncidentManager(models.Manager):
         summary=None,
         impact=None,
         lead=None,
-        severity=None,
-    ):
+        severity=None    ):
         incident = self.create(
             report=report,
             reporter=reporter,
@@ -30,8 +28,7 @@ class IncidentManager(models.Manager):
             summary=summary,
             impact=impact,
             lead=lead,
-            severity=severity,
-        )
+            severity=severity        )
         return incident
 
 
@@ -76,6 +73,7 @@ class Incident(models.Model):
     severity = models.CharField(
         max_length=10, blank=True, null=True, choices=SEVERITIES
     )
+
 
     def __str__(self):
         return self.report
@@ -150,6 +148,9 @@ class Incident(models.Model):
 
     def timeline_events(self):
         return core.models.TimelineEvent.objects.filter(incident=self)
+
+    def zoom_meeting(self):
+        return zoom.models.Meeting.objects.get(incident=self)
 
     def save(self, *args, **kwargs):
         self.impact = sanitize(self.impact)
