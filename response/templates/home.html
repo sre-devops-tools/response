@@ -18,7 +18,7 @@
     <div class="col-lg-12">
       <ul>
         {% for incident in incidents %}
-        {% if incident.status_text|upper != 'CLOSED' %}
+        {% if incident.status_text|upper != 'RESOLVED' %}
         <li>
           {{ incident.severity_emoji }}
           <a href="{% url 'incident_doc' incident.pk %}" target="_blank">Incident {{ incident.pk }}&nbsp;</a>
@@ -37,7 +37,7 @@
   <div class="col-lg-12">
     <ul>
       {% for incident in incidents %}
-      {% if incident.status_text|upper == 'CLOSED' %}
+      {% if incident.status_text|upper == 'RESOLVED' %}
       <li>
         {{ incident.severity_emoji }}
         <a href="{% url 'incident_doc' incident.pk %}" target="_blank">Incident {{ incident.pk }}&nbsp;</a>
