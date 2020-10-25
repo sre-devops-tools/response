@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.db import models
 
-from response import core, slack
+from response import core, slack, zoom
 from response.core.models.user_external import ExternalUser
 from response.core.util import sanitize
 
@@ -159,6 +159,9 @@ class Incident(models.Model):
 
     def timeline_events(self):
         return core.models.TimelineEvent.objects.filter(incident=self)
+
+    def zoom_meeting(self):
+        return zoom.models.Meeting.objects.get(incident=self)
 
     def save(self, *args, **kwargs):
         self.impact = sanitize(self.impact)
