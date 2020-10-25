@@ -14,6 +14,7 @@ class IncidentManager(models.Manager):
         reporter,
         report_time,
         report_only,
+        mitigated,
         private=False,
         summary=None,
         impact=None,
@@ -25,6 +26,7 @@ class IncidentManager(models.Manager):
             reporter=reporter,
             report_time=report_time,
             report_only=report_only,
+            mitigated=mitigated,
             private=private,
             start_time=report_time,
             summary=summary,
@@ -50,9 +52,11 @@ class Incident(models.Model):
     )
     report_time = models.DateTimeField()
     report_only = models.BooleanField(default=False)
+    mitigated = models.BooleanField(default=False)
     private = models.BooleanField(default=False)
 
     start_time = models.DateTimeField(null=False)
+    mitigated_time = models.DateTimeField(null=False)
     end_time = models.DateTimeField(blank=True, null=True)
 
     # Additional info
@@ -122,25 +126,31 @@ class Incident(models.Model):
 
         return {"1": "⛈️", "2": "🌧️", "3": "🌦️", "4": "🌤️"}[self.severity]
 
-    def status_text(self):
-        if self.report_only:
-            return "reported"
-        elif self.is_closed():
-            return "resolved"
-        else:
-            return "live"
+        def status_text(self):
+            if self.report_only:
+                return "reported"
+            elif self.is_closed():
+                return "resolved"
+            elif self.mitigated:
+                return "mitigated"
+            else:
+                return "live"
 
     def status_emoji(self):
         if self.report_only:
             return ":notebook:"
         elif self.is_closed():
             return ":droplet:"
+        elif self.mitigated:
+            return ":face_with_thermother:"
         else:
             return ":fire:"
 
     def badge_type(self):
         if self.is_closed():
             return "badge-success"
+        elif self.mitigated:
+            return "badge-warning"
         elif self.severity and int(self.severity) < 3:
             return "badge-danger"
         return "badge-warning"
