@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 
-from response.core.models import Action, ExternalUser, Incident
+from response.core.models import Action, ExternalUser, Incident, StatusUpdate
 from response.slack.cache import get_user_profile
 from response.slack.client import SlackError
 from response.slack.decorators.incident_command import (
@@ -16,6 +16,14 @@ logger = logging.getLogger(__name__)
 def send_help_text(incident: Incident, user_id: str, message: str):
     return True, get_help()
 
+@__default_incident_command(["update"], helptext="Provide an update about the status of the incident")
+def add_status_update(incident: Incident, user_id: str, message: str):
+    name = get_user_profile(user_id)["name"]
+    action_reporter, _ = ExternalUser.objects.get_or_create_slack(
+        external_id=user_id, display_name=name
+    )
+    StatusUpdate(incident=incident, text=message, user=action_reporter).save()
+    return True, None
 
 @__default_incident_command(["lead"], helptext="Assign someone as the incident lead")
 def set_incident_lead(incident: Incident, user_id: str, message: str):
