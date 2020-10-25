@@ -13,6 +13,15 @@
   animation: blinker 1s linear infinite;
 }
 
+#status .mitigated {
+  padding: 5px;
+  background: yellow;
+  color: lightyellow;
+  margin-right: 5px;
+  animation: blinker 1s linear infinite;
+}
+
+
 #status .resolved {
   padding: 5px;
   background: green;

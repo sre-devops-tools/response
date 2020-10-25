@@ -50,9 +50,11 @@ class Incident(models.Model):
     )
     report_time = models.DateTimeField()
     report_only = models.BooleanField(default=False)
+    mitigated = models.BooleanField(default=False)
     private = models.BooleanField(default=False)
 
     start_time = models.DateTimeField(null=False)
+    mitigated_time = models.DateTimeField(blank=True, null=True)
     end_time = models.DateTimeField(blank=True, null=True)
 
     # Additional info
@@ -127,20 +129,27 @@ class Incident(models.Model):
             return "reported"
         elif self.is_closed():
             return "resolved"
+        elif self.mitigated:
+            return "mitigated"
         else:
             return "live"
+
 
     def status_emoji(self):
         if self.report_only:
             return ":notebook:"
         elif self.is_closed():
             return ":droplet:"
+        elif self.mitigated:
+            return ":face_with_thermother:"
         else:
             return ":fire:"
 
     def badge_type(self):
         if self.is_closed():
             return "badge-success"
+        elif self.mitigated:
+            return "badge-warning"
         elif self.severity and int(self.severity) < 3:
             return "badge-danger"
         return "badge-warning"
