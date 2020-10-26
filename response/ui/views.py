@@ -1,7 +1,7 @@
 from django.http import Http404, HttpRequest
 from django.shortcuts import render
 
-from response.core.models import Action, Incident
+from response.core.models import Action, Incident, StatusUpdate
 from response.decorators import response_login_required
 from response.slack.models import PinnedMessage, UserStats
 
@@ -21,6 +21,7 @@ def incident_doc(request: HttpRequest, incident_id: str):
 
     events = PinnedMessage.objects.filter(incident=incident).order_by("timestamp")
     actions = Action.objects.filter(incident=incident).order_by("created_date")
+    updates = StatusUpdate.objects.filter(incident=incident).order_by("-timestamp")
     user_stats = UserStats.objects.filter(incident=incident).order_by("-message_count")[
         :5
     ]
@@ -30,6 +31,7 @@ def incident_doc(request: HttpRequest, incident_id: str):
         context={
             "incident": incident,
             "events": events,
+            "updates": updates,
             "actions": actions,
             "user_stats": user_stats,
         },

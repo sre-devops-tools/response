@@ -49,14 +49,19 @@
             {% endif %}
 
         </ul>
-        {% comment %} ----- Actions ----- {% endcomment %}
-        <h2>Actions</h2>
-        {% if actions %}
-        <ul>
-          {% for action in actions.all %}
-          <li>{{ action.details|unslackify|markdown_filter|safe }} </li>
-          {% endfor %}
-        </ul>
+        {% comment %} ----- Updates ----- {% endcomment %}
+        <h2>Updates</h2>
+        {% if updates %}
+        <div class="timeline">
+            {% for update in updates %}
+            <div class="container">
+                <div class="content">
+                    <strong>{{ update.timestamp|date:"H:i:s" }} - {{update.user }}</strong>
+                    {{ update.text|stringformat:'s'|unslackify|markdown_filter|safe  }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
         {% endif %}
 
         {% comment %} ----- Timeline ----- {% endcomment %}
@@ -73,6 +78,18 @@
             {% endfor %}
         </div>
         {% endif %}
+
+        {% comment %} ----- Actions ----- {% endcomment %}
+        <h2>Actions</h2>
+        {% if actions %}
+        <ul>
+          {% for action in actions.all %}
+          <li>{{ action.details|unslackify|markdown_filter|safe }} </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+
+        
 
     </div>
 </div>
