@@ -46,6 +46,10 @@ class CommsChannelManager(models.Manager):
             settings.SLACK_CLIENT.set_channel_topic(
                 channel_id, f"{incident.report} - {doc_url}"
             )
+
+            settings.SLACK_CLIENT.send_message(
+            channel_id,
+            'use the command /incident help to get the commands available')
         except SlackError as e:
             logger.error(f"Failed to set channel topic {e}")
             raise
