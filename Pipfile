@@ -25,7 +25,8 @@ markdown2 = ">=2.3.9"
 apscheduler = "*"
 black = "*"
 python-jose = "*"
-
+django-allauth = "*"
+django-allauth-bootstrap = "*"
 
 [requires]
 python_version = "3.8"

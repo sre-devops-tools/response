@@ -47,10 +47,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "after_response",
     "rest_framework",
     "bootstrap4",
     "response.apps.ResponseConfig",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount"
 ]
 
 MIDDLEWARE = [
@@ -204,3 +208,53 @@ RESPONSE_SANITIZE_USER_INPUT = True
 ZOOM_API_KEY = get_env_var("ZOOM_API_KEY")
 ZOOM_API_SECRET = get_env_var("ZOOM_API_SECRET")
 ZOOM_API_USER_ID = get_env_var("ZOOM_API_USER_ID")
+
+AUTHENTICATION_BACKENDS = (
+ "django.contrib.auth.backends.ModelBackend",
+ "allauth.account.auth_backends.AuthenticationBackend"
+ )
+
+SITE_ID = 2
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "/accounts/login"
+
+GOOGLE_CLIENT_ID = get_env_var("GOOGLE_CLIENT_ID", True)
+GOOGLE_CLIENT_SECRET = get_env_var("GOOGLE_CLIENT_SECRET", True)
+
+GITHUB_CLIENT_ID = get_env_var("GITHUB_CLIENT_ID", True)
+GITHUB_CLIENT_SECRET = get_env_var("GITHUB_CLIENT_SECRET", True)
+
+SOCIALACCOUNT_PROVIDERS = {}
+
+if GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET:
+    SOCIALACCOUNT_PROVIDERS['github'] = {
+        'SCOPE': [
+            'user',
+            'repo',
+            'read:org',
+        ],
+        'APP': {
+            'client_id': GITHUB_CLIENT_ID,
+            'secret': GITHUB_CLIENT_SECRET
+        }
+    }
+
+if GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET:
+    SOCIALACCOUNT_PROVIDERS['google'] = {
+        'APP': {
+            'client_id': GOOGLE_CLIENT_ID,
+            'secret': GOOGLE_CLIENT_SECRET,
+            'key': ''
+        },
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+
+if SOCIALACCOUNT_PROVIDERS != None:
+    for provider in  SOCIALACCOUNT_PROVIDERS.keys():
+        INSTALLED_APPS.append("allauth.socialaccount.providers.%s" % provider)

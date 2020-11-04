@@ -1,4 +1,5 @@
 {% load static %}
+{% load account %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +24,6 @@
 </head>
 
 <body>
-
   <!-- Navigation -->
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -43,14 +43,23 @@
           <a class="nav-link" href="https://github.com/sre-devops-tools/response">Help</a>
         </li>
       </ul>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item nav-link">
+           {% user_display user %}
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/accounts/logout">Logout</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </nav>
-
+</div>
   <!-- Page Content -->
   <div class="container bg-white mt-4 mb-4">
     {% block content %}{% endblock %}
   </div>
-
   <!-- Bootstrap core JavaScript -->
   {% comment %} <script src="{% static "jquery/jquery.min.js" %}"></script> {% endcomment %}
   <script src="{% static "bootstrap/js/bootstrap.bundle.min.js" %}"></script>

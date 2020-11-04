@@ -1,7 +1,6 @@
 from django.apps import AppConfig
 from django.conf import settings as site_settings
 
-
 class ResponseConfig(AppConfig):
     name = "response"
 
