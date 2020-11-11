@@ -58,8 +58,7 @@ def report_incident(
         incidents_channel_ref = channel_reference(settings.INCIDENT_CHANNEL_ID)
 
     text = (
-        f"Thanks for raising the incident 🙏\n\nHead over to {incidents_channel_ref} "
-        f"to complete the report and/or help deal with the issue"
+        f"Thanks for raising the incident 🙏"
     )
     settings.SLACK_CLIENT.send_ephemeral_message(channel_id, user_id, text)
 
