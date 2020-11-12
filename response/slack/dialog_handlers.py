@@ -51,7 +51,6 @@ def report_incident(
         lead=lead,
         severity=severity,
     )
-    print(new_incident)
     timeline_event = TimelineEvent(
         incident=new_incident,
         timestamp= new_incident.report_time,
