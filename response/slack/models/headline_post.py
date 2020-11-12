@@ -107,7 +107,7 @@ class HeadlinePost(models.Model):
         msg.add_block(
             Section(
                 block_id="incident_doc",
-                text=Text(f"📄 Document: <{doc_url}|Incident {self.incident.pk}>"),
+                text=Text(f"📄 Status: <{doc_url}|Incident {self.incident.pk}>"),
             )
         )
 
