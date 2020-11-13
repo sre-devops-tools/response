@@ -30,13 +30,14 @@ def handle_create_comms_channel(ac: ActionContext):
     headline_post.comms_channel = comms_channel
     headline_post.save()
 
+
 @action_handler(HeadlinePost.CREATE_ZOOM_MEETING_BUTTON)
 def handle_create_zoom_meeting(ac: ActionContext):
     if Meeting.objects.filter(incident=ac.incident).exists():
         return
 
     zoom_meeting = Meeting.objects.create_meeting(ac.incident)
-     # Update the headline post to link to this
+    # Update the headline post to link to this
     headline_post = HeadlinePost.objects.get(incident=ac.incident)
     headline_post.zoom_meeting = zoom_meeting
     headline_post.save()

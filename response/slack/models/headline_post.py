@@ -14,6 +14,7 @@ from response.slack.decorators.headline_post_action import (
 from response.slack.models.comms_channel import CommsChannel
 from response.slack.reference_utils import channel_reference, user_reference
 from response.zoom.models import Meeting
+
 logger = logging.getLogger(__name__)
 
 
@@ -38,9 +39,7 @@ class HeadlinePost(models.Model):
     comms_channel = models.OneToOneField(
         CommsChannel, on_delete=models.DO_NOTHING, null=True
     )
-    zoom_meeting = models.OneToOneField(
-        Meeting, on_delete=models.DO_NOTHING, null=True
-    )
+    zoom_meeting = models.OneToOneField(Meeting, on_delete=models.DO_NOTHING, null=True)
 
     def update_in_slack(self):
         "Creates/updates the slack headline post with the latest incident info"
@@ -126,16 +125,14 @@ class HeadlinePost(models.Model):
                 )
 
         if not self.incident.report_only:
-            zoom_ref = (
-                self.zoom_meeting.weblink
-                if self.zoom_meeting
-                else None
-            )
+            zoom_ref = self.zoom_meeting.weblink if self.zoom_meeting else None
             if zoom_ref:
                 msg.add_block(
                     Section(
                         block_id="zoom_meeting",
-                        text=Text(f":telephone_receiver: Zoom Meeting: {zoom_ref or '-'}"),
+                        text=Text(
+                            f":telephone_receiver: Zoom Meeting: {zoom_ref or '-'}"
+                        ),
                     )
                 )
         # Add buttons (if the incident is open)
@@ -199,6 +196,7 @@ def create_comms_channel_action(headline_post):
         HeadlinePost.CREATE_COMMS_CHANNEL_BUTTON,
         value=headline_post.incident.pk,
     )
+
 
 @headline_post_action(order=150)
 def create_zoom_meeting(headline_post):

@@ -1,0 +1,31 @@
+{% extends 'adminlte/lib/_main_sidebar.html' %}
+{% load static %}
+
+{% block logo %}
+<a href="/" class="brand-link">
+  <img src="{%static 'images/logo.png' %}" alt="" class="brand-image" style="opacity: .8">
+  {% block logo_text %}<span class="brand-text font-weight-light">Incident Management </span>{% endblock %}
+</a>
+{% endblock %}
+
+{% block nav_links %}
+    <li class="nav-item">
+        <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-tachometer-alt"></i> 
+            <p>Dashboard</p>
+        </a>
+    </li>
+    <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-question-circle"></i> 
+                <p>Help</p>
+            </a>
+        </li>
+    <li class="nav-item">
+          <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-users-cog"></i> 
+              <p>Admin</p>
+          </a>
+      </li>
+
+{% endblock nav_links %}

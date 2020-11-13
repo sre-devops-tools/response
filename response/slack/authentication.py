@@ -48,7 +48,7 @@ def authenticate(request):
 
     see: https://api.slack.com/docs/verifying-requests-from-slack
     """
-    
+
     if slack_signing_secret == "":
         logger.critical("Signing secret isn't defined")
         return False

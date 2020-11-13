@@ -1,0 +1,6 @@
+<tr>
+  <td><a href="{% url 'incident_doc' incident.pk %}" target="_self">{{ incident.pk }}</a></td>
+  <td><span style="padding-right: 10px;">{{ incident.severity_emoji }}</span>{{ incident.severity_text }}</td>
+  <td><span class="badge {{ incident.badge_type }} blink_me">{{ incident.status_text | upper }}</span></span></td>
+  <td><a href="{% url 'incident_doc' incident.pk %}" target="_self">{{ incident.report }}</a></td>
+</tr>

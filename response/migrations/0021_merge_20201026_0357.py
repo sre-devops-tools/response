@@ -6,9 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('response', '0020_headlinepost_zoom_meeting'),
-        ('response', '0018_auto_20201025_0441'),
+        ("response", "0020_headlinepost_zoom_meeting"),
+        ("response", "0018_auto_20201025_0441"),
     ]
 
-    operations = [
-    ]
+    operations = []

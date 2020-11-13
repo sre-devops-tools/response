@@ -14,6 +14,8 @@
 ![create app](img/google_2.png?raw=true)
 1. Note your client ID, and client Secret and set the respective environment variables: `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`
 
+If you want to restrict emails that can log in on your app, please set the env `GOOGLE_HOSTED_DOMAIN`
+
 The app will automatically detect this environment variables and set the authentication for you.
 
 We use [Django AllAuth](https://django-allauth.readthedocs.io/en/latest/) Library, so feel free to extend and or configure any other provider.

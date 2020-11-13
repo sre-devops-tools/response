@@ -1,4 +1,5 @@
-from .core.models import Action, Event, ExternalUser, Incident, TimelineEvent, StatusUpdate
+from .core.models import (Action, Event, ExternalUser, Incident, StatusUpdate,
+                          TimelineEvent)
 from .slack.models import (CommsChannel, HeadlinePost, Notification,
                            PinnedMessage, UserStats)
 
