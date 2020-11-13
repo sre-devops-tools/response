@@ -1,6 +1,8 @@
 import logging
 from datetime import datetime
 
+from django.core.exceptions import ObjectDoesNotExist
+
 from django.conf import settings
 from response.core.models import Action, ExternalUser, Incident, StatusUpdate
 from response.slack.cache import get_user_profile
@@ -11,10 +13,9 @@ from response.slack.block_kit import (Actions, Button, Divider, Message,
                                       Section, Text)
 from response.slack.models import CommsChannel, HeadlinePost
 from response.slack.reference_utils import reference_to_id
-from response.zoom.zoom import Zoom
 from response.zoom.models import Meeting
+from response.zoom.zoom import Zoom
 
-from django.core.exceptions import ObjectDoesNotExist
 logger = logging.getLogger(__name__)
 
 
@@ -22,7 +23,10 @@ logger = logging.getLogger(__name__)
 def send_help_text(incident: Incident, user_id: str, message: str):
     return True, get_help()
 
-@__default_incident_command(["update"], helptext="Provide an update about the status of the incident")
+
+@__default_incident_command(
+    ["update"], helptext="Provide an update about the status of the incident"
+)
 def add_status_update(incident: Incident, user_id: str, message: str):
     name = get_user_profile(user_id)["name"]
     action_reporter, _ = ExternalUser.objects.get_or_create_slack(
@@ -48,6 +52,7 @@ def add_status_update(incident: Incident, user_id: str, message: str):
 
     #comms_channel.post_in_channel(msg)
     return True, None
+
 
 @__default_incident_command(["lead"], helptext="Assign someone as the incident lead")
 def set_incident_lead(incident: Incident, user_id: str, message: str):
@@ -140,6 +145,8 @@ def create_zoom(incident: Incident, user_id: str, message: str):
         h.update_in_slack()
 
     comms_channel = CommsChannel.objects.get(incident=incident)
-    comms_channel.post_in_channel(f"You can join the zoom meeting here {m.weblink} with password `{m.challenge}`")
-    
+    comms_channel.post_in_channel(
+        f"You can join the zoom meeting here {m.weblink} with password `{m.challenge}`"
+    )
+
     return True, None

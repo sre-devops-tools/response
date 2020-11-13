@@ -134,7 +134,6 @@ class Incident(models.Model):
         else:
             return "live"
 
-
     def status_emoji(self):
         if self.report_only:
             return ":notebook:"

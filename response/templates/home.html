@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "adminlte/base.html" %}
 {% load static %}
 {% load unslackify %}
 {% load markdown_filter %}
@@ -9,44 +9,61 @@
 
 
 {% block content %}
-<div class="row pb-4">
-    <div class="col-lg-12 text-center">
-        {% comment %} ----- Heading ----- {% endcomment %}
-        <h1 class="mt-3" id="title"><a href="">Open incidents</a></h1>
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Open incidents</h3>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th style="width: 10px">#</th>
+              <th>Severity</th>
+              <th>Status</th>
+              <th>Title</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for incident in incidents %}
+            {% if incident.status_text|upper != 'RESOLVED' %}
+            {% include 'incident_row.html' %}
+            {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
-
-    <div class="col-lg-12">
-      <ul>
-        {% for incident in incidents %}
-        {% if incident.status_text|upper != 'RESOLVED' %}
-        <li>
-          {{ incident.severity_emoji }}
-          <a href="{% url 'incident_doc' incident.pk %}" target="_blank">Incident {{ incident.pk }}&nbsp;</a>
-          <span class="badge {{ incident.badge_type }} blink_me">{{ incident.status_text|upper }}</span>
-          - {{ incident.report }}
-        </li>
-        {% endif %}
-        {% endfor %}
-      </ul>
-    </div>
-    <div class="col-lg-12 text-center">
-      {% comment %} ----- Heading ----- {% endcomment %}
-      <h1 class="mt-3" id="title"><a href="">Closed incidents</a></h1>
   </div>
-
-  <div class="col-lg-12">
-    <ul>
-      {% for incident in incidents %}
-      {% if incident.status_text|upper == 'RESOLVED' %}
-      <li>
-        {{ incident.severity_emoji }}
-        <a href="{% url 'incident_doc' incident.pk %}" target="_blank">Incident {{ incident.pk }}&nbsp;</a>
-        <span class="badge {{ incident.badge_type }} blink_me">{{ incident.status_text|upper }}</span>
-        - {{ incident.report }}
-      </li>
-      {% endif %}
-      {% endfor %}
-    </ul>
+</div>
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Closed incidents</h3>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th style="width: 10px">#</th>
+              <th>Severity</th>
+              <th>Status</th>
+              <th>Title</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for incident in incidents %}
+            {% if incident.status_text|upper == 'RESOLVED' %}
+            {% include 'incident_row.html' %}
+            {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
+  

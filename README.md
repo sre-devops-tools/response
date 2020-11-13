@@ -6,6 +6,8 @@ prod description
 ### Installation
 * [Slack configuration](docs/slack.md)
 * [Zoom configuration](docs/zoom.md)
+* [Google auth configuration](docs/google.md)
+* [GitHub auth configuration](docs/github.md)
 
 
 ## Local development

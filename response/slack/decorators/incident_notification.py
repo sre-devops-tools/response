@@ -69,18 +69,22 @@ def handle_notifications():
     open_incidents = Incident.objects.filter(
         end_time__isnull=True, commschannel__incident__isnull=False
     )
-    
-    current_topic = settings.SLACK_CLIENT.get_channel_topic(settings.INCIDENT_CHANNEL_ID)
-    
-    new_topic = "Open Incident(s): " + str(Incident.objects.filter(
-        end_time__isnull=True).count()) + " - "+ settings.SITE_URL
-    logger.info(current_topic.split('-')[0])
-    logger.info(new_topic.split('-')[0])
-    if current_topic.split('-')[0] != new_topic.split('-')[0]:
+
+    current_topic = settings.SLACK_CLIENT.get_channel_topic(
+        settings.INCIDENT_CHANNEL_ID
+    )
+
+    new_topic = (
+        "Open Incident(s): "
+        + str(Incident.objects.filter(end_time__isnull=True).count())
+        + " - "
+        + settings.SITE_URL
+    )
+    logger.info(current_topic.split("-")[0])
+    logger.info(new_topic.split("-")[0])
+    if current_topic.split("-")[0] != new_topic.split("-")[0]:
         logger.info("update topic")
-        settings.SLACK_CLIENT.set_channel_topic(
-                    settings.INCIDENT_CHANNEL_ID, new_topic
-                )
+        settings.SLACK_CLIENT.set_channel_topic(settings.INCIDENT_CHANNEL_ID, new_topic)
 
     for incident in open_incidents:
         for handler in NOTIFICATION_HANDLERS:

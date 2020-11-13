@@ -1,106 +1,150 @@
-{% extends "base.html" %}
+{% extends "adminlte/base.html" %}
 {% load static %}
 {% load unslackify %}
 {% load tz %}
 {% load markdown_filter %}
 
-{% block head %}
-<link rel="stylesheet" href="{% static "incident_doc.css" %}">
+{% block content_header %}
+<div class="content-header">
+    <h1 class="text-dark">#{{incident.pk}} - {{ incident.report }}</h1>
+</div>
 {% endblock %}
 
-
 {% block content %}
-{% get_current_timezone as TIME_ZONE %}
-<div class="row pb-4">
-
-    <div class="col-lg-12 text-center">
-        {% comment %} ----- Heading ----- {% endcomment %}
-        <h1 class="mt-3" id="title"><a href="">Incident {{ incident.pk }}</a></h1>
-        <div id="status"><strong class="{{ incident.status_text }} blink_me">{{ incident.status_text|upper }}</strong>
-        {% if incident.severity_text %}- {{ incident.severity_text|upper}} SEVERITY{% endif %}</div>
-    </div>
-   
-    <div class="col-lg-12">
-
-        {% comment %} ----- Summary ----- {% endcomment %}
-        <h2>Summary</h2>
-        <p>{% if incident.summary %}{{ incident.summary|unslackify|markdown_filter|safe  }}{% endif %}</p>
-        <ul class="summary-data">
-            {% if incident.impact %}<li><span>Impact:</span>{{ incident.impact|unslackify|markdown_filter|safe }}</li>{% endif %}
-            <li><span>Reporter:</span>{{ incident.reporter.display_name }}</li>
-            {% if incident.lead %}<li><span>Lead:</span>{{ incident.lead.display_name }}</li>{% endif %}
-            {% if incident.zoom_meeting %}
-            <li><span>Zoom Meeting:</span> <a href="{{ incident.zoom_meeting }}">{{ incident.zoom_meeting }}</a></li>
-            {% endif %}
-            
-        
-            {% if incident.comms_channel %}
-            <li><span>Incident Room:</span>#{{ incident.comms_channel.channel_name }}</li>
-            {% endif %}
-         
-           <li><span>Start Time:</span>{% if incident.start_time %}{{ incident.start_time }} {{TIME_ZONE}}{% endif %}</li>
-            <li><span>Report Time:</span>{% if incident.report_time %}{{ incident.report_time }} {{TIME_ZONE}}{% endif %}</li>
-
-            {% if incident.is_closed %}
-                <li><span>End Time:</span>{{ incident.end_time }} {{TIME_ZONE}}</li>
-                <li><span>Duration:</span>{{ incident.duration}}</li>
-            {% endif %}
-
-            {% if user_stats %}
-                <li><span>Participants:</span>
-                    <ul id="participant">
-                        {% for stats in user_stats %}
-                            <li>
-                            {{ stats.user.display_name }} ({{stats.message_count}} messages)
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-            {% endif %}
-
-        </ul>
-        {% comment %} ----- Updates ----- {% endcomment %}
-        <h2>Updates</h2>
-        {% if updates %}
-        <div class="timeline">
-            {% for update in updates %}
-            <div class="container">
-                <div class="content">
-                    <strong>{{ update.timestamp|date:"H:i:s" }} - {{update.user }}</strong>
-                    {{ update.text|stringformat:'s'|unslackify|markdown_filter|safe  }}
+<div class="row">
+    <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
+        <div class="row">
+            <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                    <div class="info-box-content">
+                        <span class="info-box-text text-center text-muted">Severity</span>
+                        <span class="info-box-number text-center text-muted mb-0">{{ incident.severity_emoji }} &nbsp; {{ incident.severity_text }}</span>
+                    </div>
                 </div>
             </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-        {% comment %} ----- Timeline ----- {% endcomment %}
-        <h2>Timeline</h2>
-        {% if incident.timeline_events %}
-        <div class="timeline">
-            {% for event in incident.timeline_events.all %}
-            <div class="container">
-                <div class="content">
-                    <strong>{{ event.timestamp|date:"H:i:s" }}</strong>
-                    {{ event.text|stringformat:'s'|unslackify|markdown_filter|safe  }}
+            <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                    <div class="info-box-content">
+                        <span class="info-box-text text-center text-muted">Status</span>
+                        <span  id="status" class="info-box-number text-center text-muted mb-0"><strong class="{{ incident.status_text }} blink_me">{{ incident.status_text|upper }}</strong></span>
+                    </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
-        {% endif %}
-
-        {% comment %} ----- Actions ----- {% endcomment %}
-        <h2>Actions</h2>
-        {% if actions %}
-        <ul>
-          {% for action in actions.all %}
-          <li>{{ action.details|unslackify|markdown_filter|safe }} </li>
-          {% endfor %}
-        </ul>
-        {% endif %}
-
-        
-
     </div>
 </div>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Incident summary</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <p class="text-muted">{% if incident.summary %}{{ incident.summary|unslackify|markdown_filter|safe  }}{% endif %}</p>
+                <ul>
+                    {% if incident.impact %}<li><span>Impact:</span>{{ incident.impact|unslackify|markdown_filter|safe }}</li>{% endif %}
+                    <li><span>Reporter:</span>{{ incident.reporter.display_name }}</li>
+                    {% if incident.lead %}<li><span>Lead:</span>{{ incident.lead.display_name }}</li>{% endif %}
+                    
+                    {% if incident.zoom_meeting %}
+                    <li><span>Zoom Meeting:</span> <a href="{{ incident.zoom_meeting }}">{{ incident.zoom_meeting }}</a></li>
+                    {% endif %}
+                    <li><span>Start Time:</span>{% if incident.start_time %}{{ incident.start_time }}{% endif %}</li>
+                    <li><span>Report Time:</span>{% if incident.report_time %}{{ incident.report_time }}{% endif %}</li>
+                    
+                    {% if incident.is_closed %}
+                    <li><span>End Time:</span>{{ incident.end_time }}</li>
+                    <li><span>Duration:</span>{{ incident.duration}}</li>
+                    {% endif %}
+                    
+                    {% if user_stats %}
+                    <li><span>Participants:</span>
+                        <ul id="participant">
+                            {% for stats in user_stats %}
+                            <li>
+                                {{ stats.user.display_name }} ({{stats.message_count}} messages)
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    {% endif %}
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if updates %}
+<div class="timeline">
+        <!-- Timeline time label -->
+        <div class="time-label">
+            <span class="bg-yellow">UPDATES</span>
+        </div>
+    {% for update in updates %}
+    <div>
+        <!-- Before each timeline item corresponds to one icon on the left scale -->
+        <i class="fas fa-envelope bg-blue"></i>
+        <!-- Timeline item -->
+        <div class="timeline-item">
+            <!-- Time -->
+            <span class="time"><i class="fas fa-clock"></i> {{ update.timestamp|date:"H:i:s" }}</span>
+            <!-- Header. Optional -->
+            <h3 class="timeline-header">{{ update.user }}</h3>
+            <!-- Body -->
+            <div class="timeline-body">
+                {{ update.text|stringformat:'s'|unslackify|markdown_filter|safe  }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    
+    <!-- The last icon means the story is complete -->
+    <div>
+        <i class="fas fa-clock bg-gray"></i>
+    </div>
+</div>
+<br style="clear:both;" />
+{% endif %}
+
+{% if incident.timeline_events %}
+<div class="timeline">
+    <!-- Timeline time label -->
+    <div class="time-label">
+        <span class="bg-green">TIMELINE</span>
+    </div>
+    {% for event in incident.timeline_events.all %}
+    <div>
+        <!-- Before each timeline item corresponds to one icon on the left scale -->
+        <i class="fas fa-envelope bg-blue"></i>
+        <!-- Timeline item -->
+        <div class="timeline-item">
+            <!-- Time -->
+            <span class="time"><i class="fas fa-clock"></i> {{ event.timestamp|date:"H:i:s" }}</span>
+            <!-- Header. Optional -->
+            <h3 class="timeline-header">{{ event.event_type }}</h3>
+            <!-- Body -->
+            <div class="timeline-body">
+                {{ event.text|stringformat:'s'|unslackify|markdown_filter|safe  }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    
+    <!-- The last icon means the story is complete -->
+    <div>
+        <i class="fas fa-clock bg-gray"></i>
+    </div>
+</div>
+<br style="clear:both;" />
+{% endif %}
+
+{% if actions %}
+<h2>Actions</h2>
+<ul>
+  {% for action in actions.all %}
+  <li>{{ action.details|unslackify|markdown_filter|safe }} </li>
+  {% endfor %}
+</ul>
+{% endif %}
 {% endblock %}
