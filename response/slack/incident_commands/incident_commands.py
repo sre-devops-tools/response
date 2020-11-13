@@ -3,11 +3,14 @@ from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
 
+from django.conf import settings
 from response.core.models import Action, ExternalUser, Incident, StatusUpdate
 from response.slack.cache import get_user_profile
 from response.slack.client import SlackError
 from response.slack.decorators.incident_command import (
     __default_incident_command, get_help)
+from response.slack.block_kit import (Actions, Button, Divider, Message,
+                                      Section, Text)
 from response.slack.models import CommsChannel, HeadlinePost
 from response.slack.reference_utils import reference_to_id
 from response.zoom.models import Meeting
@@ -30,6 +33,24 @@ def add_status_update(incident: Incident, user_id: str, message: str):
         external_id=user_id, display_name=name
     )
     StatusUpdate(incident=incident, text=message, user=action_reporter).save()
+    msg = Message()
+    msg.add_block(
+            Section(
+                block_id="update",
+                text=Text(
+                    f":warning: *Update:*\n{message} "
+                ),
+            )
+        )
+    comms_channel = CommsChannel.objects.get(incident=incident)
+    ts = HeadlinePost.objects.get(incident=incident).message_ts
+    msg.send(comms_channel.channel_id, None)
+    settings.SLACK_CLIENT.send_message(
+            settings.INCIDENT_CHANNEL_ID,":warning: *Update*: "+message , thread_ts=ts
+        )
+
+
+    #comms_channel.post_in_channel(msg)
     return True, None
 
 

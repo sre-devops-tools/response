@@ -4,7 +4,7 @@ from typing import Any
 
 from django.conf import settings
 
-from response.core.models import ExternalUser, Incident
+from response.core.models import ExternalUser, Incident, TimelineEvent
 from response.slack.cache import get_user_profile
 from response.slack.decorators import dialog_handler
 from response.slack.reference_utils import channel_reference
@@ -41,7 +41,7 @@ def report_incident(
             external_id=lead_id, display_name=lead_name
         )
 
-    Incident.objects.create_incident(
+    new_incident = Incident.objects.create_incident(
         report=report,
         reporter=reporter,
         report_time=datetime.now(),
@@ -51,6 +51,13 @@ def report_incident(
         lead=lead,
         severity=severity,
     )
+    timeline_event = TimelineEvent(
+        incident=new_incident,
+        timestamp= new_incident.report_time,
+        text="Incident Reported by "+reporter.full_name,
+        event_type="metadata",
+    )
+    timeline_event.save()
 
     if report_only and hasattr(settings, "INCIDENT_REPORT_CHANNEL_ID"):
         incidents_channel_ref = channel_reference(settings.INCIDENT_REPORT_CHANNEL_ID)
@@ -58,10 +65,11 @@ def report_incident(
         incidents_channel_ref = channel_reference(settings.INCIDENT_CHANNEL_ID)
 
     text = (
-        f"Thanks for raising the incident 🙏\n\nHead over to {incidents_channel_ref} "
-        f"to complete the report and/or help deal with the issue"
+        f"Thanks for raising the incident 🙏"
     )
     settings.SLACK_CLIENT.send_ephemeral_message(channel_id, user_id, text)
+
+   
 
 
 @dialog_handler(INCIDENT_EDIT_DIALOG)

@@ -106,7 +106,7 @@ class HeadlinePost(models.Model):
         msg.add_block(
             Section(
                 block_id="incident_doc",
-                text=Text(f"📄 Document: <{doc_url}|Incident {self.incident.pk}>"),
+                text=Text(f"📄 Status: <{doc_url}|Incident {self.incident.pk}>"),
             )
         )
 
@@ -120,7 +120,7 @@ class HeadlinePost(models.Model):
                 msg.add_block(
                     Section(
                         block_id="comms_channel",
-                        text=Text(f"🗣 Comms Channel: {channel_ref or '-'}"),
+                        text=Text(f":slack: Incident Room: {channel_ref or '-'}"),
                     )
                 )
 
@@ -192,7 +192,7 @@ def create_comms_channel_action(headline_post):
         # No need to create an action, channel already exists
         return None
     return Button(
-        ":speaking_head_in_silhouette: Create Comms Channel",
+        ":slack: Create Incident Room",
         HeadlinePost.CREATE_COMMS_CHANNEL_BUTTON,
         value=headline_post.incident.pk,
     )

@@ -1,6 +1,7 @@
 {% extends "adminlte/base.html" %}
 {% load static %}
 {% load unslackify %}
+{% load tz %}
 {% load markdown_filter %}
 
 {% block content_header %}
@@ -17,7 +18,7 @@
                 <div class="info-box bg-light">
                     <div class="info-box-content">
                         <span class="info-box-text text-center text-muted">Severity</span>
-                        <span class="info-box-number text-center text-muted mb-0">{{ incident.severity_emoji }} - {{ incident.severity_text }}</span>
+                        <span class="info-box-number text-center text-muted mb-0">{{ incident.severity_emoji }} &nbsp; {{ incident.severity_text }}</span>
                     </div>
                 </div>
             </div>
@@ -45,6 +46,9 @@
                     <li><span>Reporter:</span>{{ incident.reporter.display_name }}</li>
                     {% if incident.lead %}<li><span>Lead:</span>{{ incident.lead.display_name }}</li>{% endif %}
                     
+                    {% if incident.zoom_meeting %}
+                    <li><span>Zoom Meeting:</span> <a href="{{ incident.zoom_meeting }}">{{ incident.zoom_meeting }}</a></li>
+                    {% endif %}
                     <li><span>Start Time:</span>{% if incident.start_time %}{{ incident.start_time }}{% endif %}</li>
                     <li><span>Report Time:</span>{% if incident.report_time %}{{ incident.report_time }}{% endif %}</li>
                     
@@ -70,11 +74,44 @@
         </div>
     </div>
 </div>
+
+{% if updates %}
+<div class="timeline">
+        <!-- Timeline time label -->
+        <div class="time-label">
+            <span class="bg-yellow">UPDATES</span>
+        </div>
+    {% for update in updates %}
+    <div>
+        <!-- Before each timeline item corresponds to one icon on the left scale -->
+        <i class="fas fa-envelope bg-blue"></i>
+        <!-- Timeline item -->
+        <div class="timeline-item">
+            <!-- Time -->
+            <span class="time"><i class="fas fa-clock"></i> {{ update.timestamp|date:"H:i:s" }}</span>
+            <!-- Header. Optional -->
+            <h3 class="timeline-header">{{ update.user }}</h3>
+            <!-- Body -->
+            <div class="timeline-body">
+                {{ update.text|stringformat:'s'|unslackify|markdown_filter|safe  }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    
+    <!-- The last icon means the story is complete -->
+    <div>
+        <i class="fas fa-clock bg-gray"></i>
+    </div>
+</div>
+<br style="clear:both;" />
+{% endif %}
+
 {% if incident.timeline_events %}
 <div class="timeline">
     <!-- Timeline time label -->
     <div class="time-label">
-        <span class="bg-yellow">{% if incident.start_time %}{{ incident.start_time|date:"d M. Y"}}{% endif %}</span>
+        <span class="bg-green">TIMELINE</span>
     </div>
     {% for event in incident.timeline_events.all %}
     <div>
@@ -98,28 +135,16 @@
     <div>
         <i class="fas fa-clock bg-gray"></i>
     </div>
-
-
-
-
-
-
-
-
-
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
 <br style="clear:both;" />
+{% endif %}
+
+{% if actions %}
+<h2>Actions</h2>
+<ul>
+  {% for action in actions.all %}
+  <li>{{ action.details|unslackify|markdown_filter|safe }} </li>
+  {% endfor %}
+</ul>
 {% endif %}
 {% endblock %}

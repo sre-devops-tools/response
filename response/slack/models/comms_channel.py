@@ -25,7 +25,7 @@ class CommsChannelManager(models.Manager):
                 name, auto_unarchive=True
             )
         except SlackError as e:
-            logger.error(f"Failed to create comms channel {e}")
+            logger.error(f"Failed to create incident room {e}")
             raise
 
         # If the channel already existed we will need to join it
@@ -34,7 +34,7 @@ class CommsChannelManager(models.Manager):
             logger.info(f"Joining channel {name} {channel_id}")
             settings.SLACK_CLIENT.join_channel(channel_id)
         except SlackError as e:
-            logger.error(f"Failed to join comms channel {e}")
+            logger.error(f"Failed to join incident room {e}")
             raise
 
         try:
