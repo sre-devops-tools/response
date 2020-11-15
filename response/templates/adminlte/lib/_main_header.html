@@ -1,13 +1,23 @@
-{% extends 'adminlte/lib/_main_header.html' %}
+
 {% load adminlte_helpers i18n %}
 {% load static %}
 
+<nav class="main-header navbar navbar-expand navbar-dark navbar-gray-dark">
+  {% block nav_bar %}
+<!-- Left navbar links -->
+<ul class="navbar-nav">
+  <a href="https://github.com/sre-devops-tools/response" class="navbar-brand">
+        <span class="brand-text font-weight-light">Incident Management</span>
+  </a>
+  <li class="nav-item d-none d-sm-inline-block">
+      <a href="/" class="nav-link">Home</a>
+  </li>
+  <li class="nav-item d-none d-sm-inline-block">
+      <a href="/admin" class="nav-link">Admin</a>
+  </li>
+</ul>
 
-
-{% block nav_bar_center %}
-<!-- empty -->
-{% endblock %}
-
+  
 {% block nav_custom_menu %}
 <!-- Right navbar links -->
 <ul class="navbar-nav ml-auto">
@@ -16,14 +26,14 @@
     {% block user_info %}
     {% if request.user.is_authenticated %}
     <li class="nav-item dropdown">
-      <a class="nav-link" data-toggle="dropdown" href="#">
-        <i class="far fa-user fa-2x"></i>
+      <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+        <!-- hidden-xs hides the username on small devices so only the image appears. -->
+        <span >{% firstof request.user.get_short_name request.user.get_username %}</span>
       </a>
       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         <a href="#" class="dropdown-item">
           <!-- Message Start -->
           <div class="media">
-            <img src="{%avatar_url size=128 %}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
             <div class="media-body">
               <h3 class="dropdown-item-title">
                 {% firstof request.user.get_short_name request.user.get_username %}
@@ -37,7 +47,6 @@
         </a>
         <div class="dropdown-divider"></div>
         <div class="dropdown-footer">
-          <a href="{% block change_password_url %}{% url 'admin:password_change' %}{% endblock %}" class="btn btn-primary btn-sm">{% trans 'Change password' %}</a>
           <a  href="/accounts/logout" class="btn btn-danger btn-sm">{%trans 'Sign out'%}</a>
         </div>
         
@@ -49,3 +58,5 @@
   </ul>
 </ul>
 {% endblock nav_custom_menu %}
+{% endblock %}
+</nav>
