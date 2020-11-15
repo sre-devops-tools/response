@@ -88,7 +88,7 @@
         <!-- Timeline item -->
         <div class="timeline-item">
             <!-- Time -->
-            <span class="time"><i class="fas fa-clock"></i> {{ update.timestamp|date:"H:i:s" }}</span>
+            <span class="time"><i class="fas fa-clock"></i> {{ update.timestamp|date:"m/d/y H:i:s" }} UTC</span>
             <!-- Header. Optional -->
             <h3 class="timeline-header">{{ update.user }}</h3>
             <!-- Body -->
@@ -120,7 +120,7 @@
         <!-- Timeline item -->
         <div class="timeline-item">
             <!-- Time -->
-            <span class="time"><i class="fas fa-clock"></i> {{ event.timestamp|date:"H:i:s" }}</span>
+            <span class="time"><i class="fas fa-clock"></i> {{ event.timestamp|date:"m/d/y H:i:s" }} UTC</span>
             <!-- Header. Optional -->
             <h3 class="timeline-header">{{ event.event_type }}</h3>
             <!-- Body -->

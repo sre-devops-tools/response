@@ -8,7 +8,7 @@ from response.slack.models import PinnedMessage, UserStats
 
 @response_login_required
 def home(request: HttpRequest):
-    incidents = Incident.objects.all
+    incidents = Incident.objects.all().order_by("-start_time")
     return render(request, template_name="home.html", context={"incidents": incidents})
 
 
