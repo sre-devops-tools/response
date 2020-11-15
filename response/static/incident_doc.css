@@ -34,3 +34,14 @@
       opacity: 0.6;
   }
 }
+
+.timeline::after {
+  content: '';
+  position: absolute;
+  width: 3px;
+  /* background-color: #c3c8cf; */
+  top: 0;
+  bottom: 0;
+  left: 28px;
+  margin-left: -3px;
+}
