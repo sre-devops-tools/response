@@ -83,8 +83,11 @@
             </div>
         </div>
         {% if incident.is_closed %}
+        
         <div>
-            <button type="button" class="btn btn-block bg-gradient-primary btn-xs">Export to Post-Mortem</button>
+            {% if confluence %}
+            <a href="{% url 'export' incident.id %}" class="btn btn-block bg-gradient-primary btn-xs">Export Post-Mortem to Confluence</a>
+            {% endif %}
         </div>
         {% endif %}
     </div>
