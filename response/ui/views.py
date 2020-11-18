@@ -34,8 +34,11 @@ def export_to_confluence(request: HttpRequest, incident_id: str):
     content_file = content_file.replace('%LINK%',"{0}://{1}{2}".format(request.scheme, request.get_host(), request.path).replace('export','') )
     content_file = content_file.replace('%SUMMARY%',incident.summary )
 
-
+    events = PinnedMessage.objects.filter(incident=incident).order_by("timestamp")
+    updates = StatusUpdate.objects.filter(incident=incident).order_by("timestamp")
     
+    
+
     print(content_file)
     s = requests.Session()
     s.headers['Authorization'] = 'Bearer '+settings.CONFLUENCE_TOKEN
