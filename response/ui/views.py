@@ -2,6 +2,7 @@ from django.http import Http404, HttpRequest
 import requests
 import datetime
 from django.shortcuts import render
+from django.shortcuts import redirect
 from atlassian import Confluence
 from django.template import loader
 import os
@@ -38,15 +39,20 @@ def export_to_confluence(request: HttpRequest, incident_id: str):
     updates = StatusUpdate.objects.filter(incident=incident).order_by("timestamp")
     
     
-
-    print(content_file)
     s = requests.Session()
     s.headers['Authorization'] = 'Bearer '+settings.CONFLUENCE_TOKEN
     b = Confluence(url=settings.CONFLUENCE_URL, username=settings.CONFLUENCE_USER,
     password=settings.CONFLUENCE_TOKEN)
     incident.start_time
-    b.create_page(space=settings.CONFLUENCE_SPACE, title='['+incident.start_time.strftime("%Y-%m-%d")+'] PostMortem '+incident.report, body=content_file, parent_id=settings.CONFLUENCE_PARENT)
-    return incident_doc(request,incident_id)
+    page_created = b.create_page(space=settings.CONFLUENCE_SPACE, title='['+incident.start_time.strftime("%Y-%m-%d")+'] PostMortem '+incident.report, body=content_file, parent_id=settings.CONFLUENCE_PARENT)
+    print(page_created)
+    links_data = page_created['_links']
+    print(links_data)
+    print(links_data['base'])
+    print(links_data['base']+links_data['webui'])
+    incident.post_mortem = links_data['base']+links_data['webui']
+    incident.save()
+    return redirect('incident_doc', incident_id=incident_id)
 
 @response_login_required
 def incident_doc(request: HttpRequest, incident_id: str):

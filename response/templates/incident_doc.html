@@ -79,13 +79,17 @@
                         </ul>
                     </li>
                     {% endif %}
+                    {% if incident.post_mortem %}
+                    <li><span>Post-Mortem:</span><a href="{{ incident.post_mortem }}"> {{ incident.post_mortem }}</a></li>
+                    {%endif%}
+
                 </ul>
             </div>
         </div>
         {% if incident.is_closed %}
         
         <div>
-            {% if confluence %}
+            {% if confluence and incident.post_mortem is None %}
             <a href="{% url 'export' incident.id %}" class="btn btn-block bg-gradient-primary btn-xs">Export Post-Mortem to Confluence</a>
             {% endif %}
         </div>

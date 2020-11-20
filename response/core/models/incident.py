@@ -52,6 +52,7 @@ class Incident(models.Model):
     report_only = models.BooleanField(default=False)
     mitigated = models.BooleanField(default=False)
     private = models.BooleanField(default=False)
+    post_mortem = models.URLField(blank=True, null=True)
 
     start_time = models.DateTimeField(null=False)
     mitigated_time = models.DateTimeField(blank=True, null=True)
