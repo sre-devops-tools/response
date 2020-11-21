@@ -1,0 +1,226 @@
+<ac:layout>
+    <ac:layout-section ac:type="fixed-width" ac:breakout-mode="default">
+        <ac:layout-cell>
+            <table data-layout="default">
+                <colgroup>
+                    <col style="width: 168.0px;" />
+                    <col style="width: 592.0px;" />
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td data-highlight-colour="#f4f5f7">
+                            <p><strong>PostMortem Owner</strong></p>
+                        </td>
+                        <td>
+                            <p></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-highlight-colour="#f4f5f7">
+                            <p><strong>Incident Details</strong></p>
+                        </td>
+                        <td>
+                            <p><a href="%LINK%">%LINK%</a></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-highlight-colour="#f4f5f7">
+                            <p><strong>Severity</strong></p>
+                        </td>
+                        <td>
+                            <p>%SEVERITY%</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-highlight-colour="#f4f5f7">
+                            <p><strong>Impact</strong></p>
+                        </td>
+                        <td>
+                            <p>%IMPACT%</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-highlight-colour="#f4f5f7">
+                            <p><strong>Start Time</strong></p>
+                        </td>
+                        <td>
+                            <p>%START_TIME%</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-highlight-colour="#f4f5f7">
+                            <p><strong>End Time</strong></p>
+                        </td>
+                        <td>
+                            <p>%END_TIME%</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-highlight-colour="#f4f5f7">
+                            <p><strong>Detection Time</strong></p>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <ac:adf-extension>
+                <ac:adf-node type="panel">
+                    <ac:adf-attribute key="panel-type">note</ac:adf-attribute>
+                    <ac:adf-content>
+                        <h2>Executive summary</h2>
+                        <p>%SUMMARY%</p>
+                    </ac:adf-content>
+                </ac:adf-node>
+                <ac:adf-fallback>
+                    <div class="panel conf-macro output-block"
+                        style="background-color: rgb(234,230,255);border-color: rgb(153,141,217);border-width: 1.0px;">
+                        <div class="panelContent" style="background-color: rgb(234,230,255);">
+
+                            <h2>Executive summary</h2>
+                            <p> </p>
+                        </div>
+                    </div>
+                </ac:adf-fallback>
+            </ac:adf-extension>
+        </ac:layout-cell>
+    </ac:layout-section>
+    <ac:layout-section ac:type="two_right_sidebar" ac:breakout-mode="full-width">
+        <ac:layout-cell>
+            <h2>
+                <ac:emoticon ac:name="blue-star" ac:emoji-shortname=":seedling:" ac:emoji-id="1f331"
+                    ac:emoji-fallback="🌱" /> Blameless root cause</h2>
+            <ac:structured-macro ac:name="info" ac:schema-version="1"
+                ac:macro-id="77c9ab5b-9596-4e2a-a6d9-2dad3fbcb10e">
+                <ac:rich-text-body>
+                    <p>Note the final root cause and describe what needs to change without placing blame to prevent this
+                        class of incident from recurring.</p>
+                </ac:rich-text-body>
+            </ac:structured-macro>
+            <p><br /></p>
+            <h2>
+                <ac:emoticon ac:name="blue-star" ac:emoji-shortname=":ok_hand:" ac:emoji-id="1f44c"
+                    ac:emoji-fallback="👌" /> Resolution</h2>
+            <ac:structured-macro ac:name="info" ac:schema-version="1"
+                ac:macro-id="47477942-b359-4f17-94f9-2b6d7dab595e">
+                <ac:rich-text-body>
+                    <p>What did we do to come to resolution.</p>
+                </ac:rich-text-body>
+            </ac:structured-macro>
+            <p><br /></p>
+            <h2>
+                <ac:emoticon ac:name="blue-star" ac:emoji-shortname=":eye:" ac:emoji-id="1f441"
+                    ac:emoji-fallback="👁" /> Detection</h2>
+            <ac:structured-macro ac:name="info" ac:schema-version="1"
+                ac:macro-id="88f37969-1c04-4b07-84e9-f47670ccd24c">
+                <ac:rich-text-body>
+                    <p>How was the incident detected ?</p>
+                </ac:rich-text-body>
+            </ac:structured-macro>
+            <p><br /></p>
+            <h2>
+                <ac:emoticon ac:name="blue-star" ac:emoji-shortname=":writing_hand:" ac:emoji-id="270d"
+                    ac:emoji-fallback="✍" /> Action Items</h2>
+            <ac:structured-macro ac:name="info" ac:schema-version="1"
+                ac:macro-id="7b5a7e33-4dfb-46f7-877b-e845ad6a2ae6">
+                <ac:rich-text-body>
+                    <p>List the Jira issues created to prevent this class of incident in the future. Note who is
+                        responsible, when they have to complete the work, and where that work is being tracked. Add a
+                        label Post-Mortem.</p>
+                </ac:rich-text-body>
+            </ac:structured-macro>
+            <p><br /></p>
+            <table data-layout="default">
+                <colgroup>
+                    <col style="width: 914.0px;" />
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th>
+                            <p><strong>Jira Tickets</strong></p>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <h2>
+                <ac:emoticon ac:name="blue-star" ac:emoji-shortname=":trophy:" ac:emoji-id="1f3c6"
+                    ac:emoji-fallback="🏆" /> What went well</h2>
+            <ac:structured-macro ac:name="info" ac:schema-version="1"
+                ac:macro-id="1a0f05ae-14f0-49a9-ae6c-d88d5df1396f">
+                <ac:rich-text-body>
+                    <p>Describe what went well.</p>
+                </ac:rich-text-body>
+            </ac:structured-macro>
+            <p><br /></p>
+            <h2>
+                <ac:emoticon ac:name="blue-star" ac:emoji-shortname=":thinking:" ac:emoji-id="1f914"
+                    ac:emoji-fallback="🤔" /> What went wrong</h2>
+            <ac:structured-macro ac:name="info" ac:schema-version="1"
+                ac:macro-id="3499bdc9-9372-4df4-bf20-4815326d53f5">
+                <ac:rich-text-body>
+                    <p>Describe what went wrong, and how we can improve.</p>
+                </ac:rich-text-body>
+            </ac:structured-macro>
+            <p><br /></p>
+            <h2>
+                <ac:emoticon ac:name="blue-star" ac:emoji-shortname=":sweat_smile:" ac:emoji-id="1f605"
+                    ac:emoji-fallback="😅" /> Where we got lucky</h2>
+            <ac:structured-macro ac:name="info" ac:schema-version="1"
+                ac:macro-id="9b39e56a-f111-40a9-a26c-3ada5c603072">
+                <ac:rich-text-body>
+                    <p>If we got lucky, describe how.</p>
+                </ac:rich-text-body>
+            </ac:structured-macro>
+            <p><br /></p>
+            <h2>
+                <ac:emoticon ac:name="blue-star" ac:emoji-shortname=":clock1:" ac:emoji-id="1f550"
+                    ac:emoji-fallback="🕐" /> Timeline</h2>
+            <ac:structured-macro ac:name="info" ac:schema-version="1"
+                ac:macro-id="6bb6f2ff-a97c-41c7-8655-bcc8ad9fdade">
+                <ac:rich-text-body>
+                    <p>Detail the incident timeline using UTC to standardize for timezones. Include lead-up events,
+                        post-impact event, and any decisions or changes made.</p>
+                </ac:rich-text-body>
+            </ac:structured-macro>
+            <p><br /></p>
+            <table>
+                <colgroup>
+                    <col />
+                    <col />
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th>Time</th>
+                        <th>Events</th>
+                    </tr>
+                    %TIMELINE%
+                </tbody>
+            </table>
+        </ac:layout-cell>
+        <ac:layout-cell>
+            <p><strong>Reviewers</strong>:</p>
+            <ac:task-list>
+                <ac:task>
+                    <ac:task-id>14</ac:task-id>
+                    <ac:task-status>incomplete</ac:task-status>
+                    <ac:task-body><span class="placeholder-inline-tasks">
+                            <ac:link>
+                                <ri:user ri:userkey="8a7f808975230aec01752cb537fd03d7" />
+                            </ac:link>
+                        </span></ac:task-body>
+                </ac:task>
+            </ac:task-list>
+            <p><br /></p>
+            <ac:structured-macro ac:name="toc" ac:schema-version="1" data-layout="default"
+                ac:macro-id="16cdfd47-1bd7-4cec-8281-87de1d7edcbf" />
+        </ac:layout-cell>
+    </ac:layout-section>
+</ac:layout>

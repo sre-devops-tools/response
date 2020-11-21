@@ -30,18 +30,29 @@
                     </div>
                 </div>
             </div>
+            <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                    <div class="info-box-content">
+                        <span class="info-box-text text-center text-muted">Duration</span>
+                        <span  id="status" class="info-box-number text-center text-muted mb-0">{{ incident.duration}}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Incident summary</h3>
+        <h3 class="card-title">Incident Details</h3>
+        
     </div>
     <div class="card-body">
         <div class="row">
             <div class="col-12">
-                <p class="text-muted">{% if incident.summary %}{{ incident.summary|unslackify|markdown_filter|safe  }}{% endif %}</p>
+                <p class="text-muted"></p>
+                
                 <ul>
+                    {% if incident.summary %}<li><span>Summary:</span>{{ incident.summary|unslackify|markdown_filter|safe  }}</li>{% endif %}
                     {% if incident.impact %}<li><span>Impact:</span>{{ incident.impact|unslackify|markdown_filter|safe }}</li>{% endif %}
                     <li><span>Reporter:</span>{{ incident.reporter.display_name }}</li>
                     {% if incident.lead %}<li><span>Lead:</span>{{ incident.lead.display_name }}</li>{% endif %}
@@ -68,10 +79,21 @@
                         </ul>
                     </li>
                     {% endif %}
-                    
+                    {% if incident.post_mortem %}
+                    <li><span>Post-Mortem:</span><a href="{{ incident.post_mortem }}"> {{ incident.post_mortem }}</a></li>
+                    {%endif%}
+
                 </ul>
             </div>
         </div>
+        {% if incident.is_closed %}
+        
+        <div>
+            {% if confluence and incident.post_mortem is None %}
+            <a href="{% url 'export' incident.id %}" class="btn btn-block bg-gradient-primary btn-xs">Export Post-Mortem to Confluence</a>
+            {% endif %}
+        </div>
+        {% endif %}
     </div>
 </div>
 

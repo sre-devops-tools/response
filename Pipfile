@@ -27,6 +27,7 @@ python-jose = "*"
 django-allauth = "*"
 django-adminlte3 = "*"
 bootstrap4 = "*"
+atlassian-python-api = "*"
 
 [requires]
 python_version = "3.9"
