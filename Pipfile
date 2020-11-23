@@ -26,6 +26,7 @@ black = "*"
 python-jose = "*"
 django-allauth = "*"
 django-adminlte3 = "*"
+django-prometheus = "*"
 bootstrap4 = "*"
 atlassian-python-api = "*"
 
