@@ -8,6 +8,7 @@ prod description
 * [Zoom configuration](docs/zoom.md)
 * [Google auth configuration](docs/google.md)
 * [GitHub auth configuration](docs/github.md)
+* [Confluence export configuration](docs/confluence.md)
 
 
 ## Local development
