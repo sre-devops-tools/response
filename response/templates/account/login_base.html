@@ -1,0 +1,49 @@
+{% load adminlte_helpers i18n %}
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    {% block title_outer %}
+        <title>{% block title %}{{ site.name }}{% endblock %}</title>
+    {% endblock %}
+
+    {% block meta %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    {% endblock %}
+
+    {% block stylesheets %}
+        {% include 'adminlte/lib/_styles.html' %}
+    {% endblock %}
+
+    {% block extra_head %}{% endblock %}
+</head>
+{% block body %}
+<body class="hold-transition sidebar-mini login-page {% block body_class %}{% block bodyclass %}{% endblock %}{% endblock %}">
+  <div class="login-box">
+    <!-- /.login-logo -->
+    <div class="card card-outline card-primary">
+      <div class="card-header text-center">
+        <a href="/" class="h1"><b>I</b>M</a>
+      </div>
+      <div class="card-body">
+        {% block login_content %}
+        {% endblock %}
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+  </div>
+  <!-- /.login-box -->
+  {% endblock body %}
+
+  {% block javascript %}
+  {% include 'adminlte/lib/_scripts.html' %}
+  {% endblock %}
+  
+  {% block extra_js %}{% endblock %}
+</body>
+</html>  
+
