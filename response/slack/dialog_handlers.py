@@ -53,8 +53,8 @@ def report_incident(
     )
     timeline_event = TimelineEvent(
         incident=new_incident,
-        timestamp= new_incident.report_time,
-        text="Incident Reported by "+reporter.full_name,
+        timestamp=new_incident.report_time,
+        text="Incident Reported by " + reporter.full_name,
         event_type="metadata",
     )
     timeline_event.save()
@@ -64,12 +64,8 @@ def report_incident(
     else:
         incidents_channel_ref = channel_reference(settings.INCIDENT_CHANNEL_ID)
 
-    text = (
-        f"Thanks for raising the incident 🙏"
-    )
+    text = f"Thanks for raising the incident 🙏"
     settings.SLACK_CLIENT.send_ephemeral_message(channel_id, user_id, text)
-
-   
 
 
 @dialog_handler(INCIDENT_EDIT_DIALOG)
