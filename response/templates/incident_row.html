@@ -4,4 +4,5 @@
   <td><span class="badge {{ incident.badge_type }} blink_me">{{ incident.status_text | upper }}</span></span></td>
   <td>{{incident.start_time}} UTC</td>
   <td><a href="{% url 'incident_doc' incident.pk %}" target="_self">{{ incident.report }}</a></td>
+  <td>{% if incident.lead %}{{ incident.lead.display_name }}{% endif %}</td>
 </tr>
