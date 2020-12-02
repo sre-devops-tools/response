@@ -60,11 +60,11 @@
                     {% if incident.zoom_meeting %}
                     <li><span>Zoom Meeting:</span> <a href="{{ incident.zoom_meeting }}">{{ incident.zoom_meeting }}</a></li>
                     {% endif %}
-                    <li><span>Start Time:</span>{% if incident.start_time %}{{ incident.start_time }}{% endif %}</li>
-                    <li><span>Report Time:</span>{% if incident.report_time %}{{ incident.report_time }}{% endif %}</li>
+                    <li><span>Start Time:</span>{% if incident.start_time %}{{ incident.start_time }} UTC{% endif %}</li>
+                    <li><span>Report Time:</span>{% if incident.report_time %}{{ incident.report_time }} UTC {% endif %}</li>
                     
                     {% if incident.is_closed %}
-                    <li><span>End Time:</span>{{ incident.end_time }}</li>
+                    <li><span>End Time:</span>{{ incident.end_time }} UTC</li>
                     <li><span>Duration:</span>{{ incident.duration}}</li>
                     {% endif %}
                     
