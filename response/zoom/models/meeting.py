@@ -18,7 +18,7 @@ class MeetingManager(models.Manager):
         Creates a zoom meeting, and saves a reference to it in the DB
         """
 
-        z = Zoom().create(incident.summary, incident.summary)
+        z = Zoom().create(incident.report, incident.report)
         meeting = self.create(
             incident=incident, weblink=z["weblink"], challenge=z["challenge"]
         )
