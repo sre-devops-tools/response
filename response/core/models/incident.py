@@ -158,7 +158,7 @@ class Incident(models.Model):
         return core.models.Action.objects.filter(incident=self)
 
     def timeline_events(self):
-        return core.models.TimelineEvent.objects.filter(incident=self)
+        return core.models.TimelineEvent.objects.filter(incident=self).order_by("-timestamp")
 
     def zoom_meeting(self):
         return zoom.models.Meeting.objects.get(incident=self)
