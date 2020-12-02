@@ -18,7 +18,7 @@ def get_help():
     """
     rendered = ""
     for k in sorted(COMMAND_HELP.keys()):
-        rendered += f"`{k}` -  {COMMAND_HELP[k]}\n"
+        rendered += f"`/incident {k}` -  {COMMAND_HELP[k]}\n"
     return rendered
 
 
