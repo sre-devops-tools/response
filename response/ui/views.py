@@ -3,7 +3,7 @@ import os
 from itertools import chain
 from operator import attrgetter
 import logging
-
+import htmp
 import requests
 from atlassian import Confluence
 from django.conf import settings
@@ -84,14 +84,14 @@ def export_to_confluence(request: HttpRequest, incident_id: str):
         + incident.start_time.strftime("%Y-%m-%d")
         + "] PostMortem "
         + incident.report)
-    logger.info(content_file)
+    logger.info(html.escape(content_file))
     page_created = b.create_page(
         space=settings.CONFLUENCE_SPACE,
         title="["
         + incident.start_time.strftime("%Y-%m-%d")
         + "] PostMortem "
         + incident.report,
-        body=content_file,
+        body=html.escape(content_file),
         parent_id=settings.CONFLUENCE_PARENT,
     )
     links_data = page_created["_links"]
