@@ -2,6 +2,7 @@ import datetime
 import os
 from itertools import chain
 from operator import attrgetter
+import logging
 
 import requests
 from atlassian import Confluence
@@ -14,6 +15,7 @@ from response.core.models import Action, Incident, StatusUpdate
 from response.decorators import response_login_required
 from response.slack.models import PinnedMessage, UserStats
 
+logger = logging.getLogger(__name__)
 
 @response_login_required
 def home(request: HttpRequest):
@@ -77,7 +79,12 @@ def export_to_confluence(request: HttpRequest, incident_id: str):
         username=settings.CONFLUENCE_USER,
         password=settings.CONFLUENCE_TOKEN,
     )
-    incident.start_time
+    logger.info(settings.CONFLUENCE_SPACE)
+    logger.info("["
+        + incident.start_time.strftime("%Y-%m-%d")
+        + "] PostMortem "
+        + incident.report)
+    logger.info(content_file)
     page_created = b.create_page(
         space=settings.CONFLUENCE_SPACE,
         title="["
