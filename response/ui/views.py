@@ -3,7 +3,7 @@ import os
 from itertools import chain
 from operator import attrgetter
 import logging
-import htmp
+import html
 import requests
 from atlassian import Confluence
 from django.conf import settings
