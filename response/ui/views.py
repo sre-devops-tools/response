@@ -3,14 +3,13 @@ import os
 from itertools import chain
 from operator import attrgetter
 import logging
-import html
 import requests
 from atlassian import Confluence
 from django.conf import settings
 from django.http import Http404, HttpRequest
 from django.shortcuts import redirect, render
 from django.template import loader
-
+import html
 from response.core.models import Action, Incident, StatusUpdate
 from response.decorators import response_login_required
 from response.slack.models import PinnedMessage, UserStats
@@ -68,7 +67,7 @@ def export_to_confluence(request: HttpRequest, incident_id: str):
             "<td>" + item.timestamp.strftime("%Y-%m-%d %H:%M:%S") + " UTC" + "</td>"
         )
 
-        timeline_content += "<td>" + update + item.text + "</td>"
+        timeline_content += "<td>" + update + html.escape(item.text) + "</td>"
         timeline_content += "</tr>"
 
     content_file = content_file.replace("%TIMELINE%", timeline_content)
@@ -79,19 +78,15 @@ def export_to_confluence(request: HttpRequest, incident_id: str):
         username=settings.CONFLUENCE_USER,
         password=settings.CONFLUENCE_TOKEN,
     )
-    logger.info(settings.CONFLUENCE_SPACE)
-    logger.info("["
-        + incident.start_time.strftime("%Y-%m-%d")
-        + "] PostMortem "
-        + incident.report)
-    logger.info(html.escape(content_file))
+
+    logger.info(content_file)
     page_created = b.create_page(
         space=settings.CONFLUENCE_SPACE,
         title="["
         + incident.start_time.strftime("%Y-%m-%d")
         + "] PostMortem "
         + incident.report,
-        body=html.escape(content_file),
+        body=content_file,
         parent_id=settings.CONFLUENCE_PARENT,
     )
     links_data = page_created["_links"]
