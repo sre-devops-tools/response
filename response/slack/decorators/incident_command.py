@@ -16,9 +16,9 @@ def get_help():
     """
     get_help returns the help string for a command
     """
-    rendered = ""
+    rendered = "These are the available Zoom commands:\n"
     for k in sorted(COMMAND_HELP.keys()):
-        rendered += f"`/incident {k}` -  {COMMAND_HELP[k]}\n"
+        rendered += f"`/incident {k} {COMMAND_HELP[k]}\n"
     return rendered
 
 

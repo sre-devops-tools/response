@@ -15,8 +15,8 @@
 
 #status .mitigated {
   padding: 3px;
-  background: yellow;
-  color: lightyellow;
+  background: #ffc107;
+  color: black;
   animation: blinker 1s linear infinite;
   border-radius: 8px;
 }
