@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from response.core.models import Action, ExternalUser, Incident, StatusUpdate
 from response.slack.block_kit import (Actions, Button, Divider, Message,
                                       Section, Text)
-from response.slack.cache import get_user_profile
+from response.slack.cache import get_user_profile, get_user_profile_by_name
 from response.slack.client import SlackError
 from response.slack.decorators.incident_command import (
     __default_incident_command, get_help)
@@ -53,17 +53,16 @@ def add_status_update(incident: Incident, user_id: str, message: str):
 
 @__default_incident_command(["lead"], helptext="[@user]` - Assign someone as the incident lead")
 def set_incident_lead(incident: Incident, user_id: str, message: str):
-    print(user_id)
-    assignee = reference_to_id(message) or user_id
-    print(assignee)
-    name = get_user_profile(assignee)["name"]
+    assignee = get_user_profile_by_name(message)
+
+    name = assignee['name']
     print(name)
     user, _ = ExternalUser.objects.get_or_create_slack(
-        external_id=assignee, display_name=name
+        external_id=assignee['id'], display_name=name
     )
     incident.lead = user
     incident.save()
-    return True, None
+    return add_status_update(incident, user_id,'New lead is '+incident.lead.full_name)
 
 
 @__default_incident_command(["severity"], helptext="[critical|major|minor|trivial]` - Set the incident severity")

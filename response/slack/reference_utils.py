@@ -12,6 +12,8 @@ def channel_reference(channel_id):
 def user_reference(user_id):
     return f"<@{user_id}>"
 
+def user_id_from_name(value):
+    return None
 
 def reference_to_id(value):
     """take a string containing <@U123ABCD> refs and extract first match"""
