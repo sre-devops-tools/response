@@ -55,7 +55,7 @@
                     {% if incident.summary %}<li><span><strong>Summary:</strong> </span>{{ incident.summary|unslackify|markdown_filter|safe  }}</li>{% endif %}
                     {% if incident.impact %}<li><span><strong>Impact:</strong> </span>{{ incident.impact|unslackify|markdown_filter|safe }}</li>{% endif %}
                     <li><span><strong>Reporter:</strong> </span>{{ incident.reporter.display_name }}</li>
-                    {% if incident.lead %}<li><span><strong>Lead:</strong> </span>{{ incident.lead.display_name }}</li>{% endif %}
+                    {% if incident.lead %}<li><span><strong>Lead:</strong> </span>{{ incident.lead.full_name }}</li>{% endif %}
                     
                     {% if incident.zoom_meeting %}
                     <li><span><strong>Zoom Meeting:</strong> </span> <a href="{{ incident.zoom_meeting }}">{{ incident.zoom_meeting }}</a></li>

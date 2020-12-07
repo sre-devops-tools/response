@@ -25,7 +25,7 @@ ACCEPT_PROPOSED_TEXT = "Yes"
 
 
 @__default_incident_command(
-    ["summary"], helptext="Provide a summary of what's going on"
+    ["summary"], helptext="[text]` - Provide a summary of what's going on"
 )
 def update_summary(incident: Incident, user_id: str, message: str):
     # Easy case. No summary currently and one has been provided

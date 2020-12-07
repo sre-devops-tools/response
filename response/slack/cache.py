@@ -113,3 +113,35 @@ def get_user_profile_by_email(email):
 
         logger.info(f"Got user with email {email} from Slack and cached in DB")
         return user_profile
+
+def get_user_profile_by_name(name):
+    """
+    Gets a slack user profile:
+        - from the DB cache if available
+        - or else from the Slack API
+    """
+    if not name:
+        raise SlackError("Can't fetch user without an name")
+
+    try:
+        name = name.replace('@','')
+        logger.info(f"Getting UserID for {name} from DB cache")
+        external_user = ExternalUser.objects.get(display_name=name)
+        logger.info(f"Got user with name {name} from DB cache")
+
+        return {
+            "id": external_user.external_id,
+            "name": external_user.display_name,
+            "fullname": external_user.full_name,
+            "email": external_user.email,
+        }
+    except ExternalUser.DoesNotExist:
+        # profile from slack
+        try:
+            user_id = settings.SLACK_CLIENT.get_user_id(name)
+            return get_user_profile(user_id)
+        except SlackError:
+            logger.error(
+                f"Failed to get user with name {name} from DB cache or Slack"
+            )
+            raise

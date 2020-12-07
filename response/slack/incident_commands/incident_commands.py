@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from response.core.models import Action, ExternalUser, Incident, StatusUpdate
 from response.slack.block_kit import (Actions, Button, Divider, Message,
                                       Section, Text)
-from response.slack.cache import get_user_profile
+from response.slack.cache import get_user_profile, get_user_profile_by_name
 from response.slack.client import SlackError
 from response.slack.decorators.incident_command import (
     __default_incident_command, get_help)
@@ -19,13 +19,13 @@ from response.zoom.zoom import Zoom
 logger = logging.getLogger(__name__)
 
 
-@__default_incident_command(["help"], helptext="Display a list of commands and usage")
+@__default_incident_command(["help"], helptext="` - Display a list of commands and usage")
 def send_help_text(incident: Incident, user_id: str, message: str):
     return True, get_help()
 
 
 @__default_incident_command(
-    ["update"], helptext="Provide an update about the status of the incident"
+    ["update"], helptext="[text]` - Provide an update about the status of the incident"
 )
 def add_status_update(incident: Incident, user_id: str, message: str):
     name = get_user_profile(user_id)["name"]
@@ -51,31 +51,33 @@ def add_status_update(incident: Incident, user_id: str, message: str):
     return True, None
 
 
-@__default_incident_command(["lead"], helptext="Assign someone as the incident lead")
+@__default_incident_command(["lead"], helptext="[@user]` - Assign someone as the incident lead")
 def set_incident_lead(incident: Incident, user_id: str, message: str):
-    assignee = reference_to_id(message) or user_id
-    name = get_user_profile(assignee)["name"]
+    assignee = get_user_profile_by_name(message)
+
+    name = assignee['name']
+    print(name)
     user, _ = ExternalUser.objects.get_or_create_slack(
-        external_id=assignee, display_name=name
+        external_id=assignee['id'], display_name=name
     )
     incident.lead = user
     incident.save()
-    return True, None
+    return add_status_update(incident, user_id,'New lead is '+incident.lead.full_name)
 
 
-@__default_incident_command(["severity", "sev"], helptext="Set the incident severity")
+@__default_incident_command(["severity"], helptext="[critical|major|minor|trivial]` - Set the incident severity")
 def set_severity(incident: Incident, user_id: str, message: str):
     for sev_id, sev_name in Incident.SEVERITIES:
         # look for sev name (e.g. critical) or sev id (1)
-        if (sev_name in message) or (sev_id in message):
+        if (sev_name in message.lower()) or (sev_id in message.lower()):
             incident.severity = sev_id
             incident.save()
-            return True, None
+            return add_status_update(incident, user_id,'Severity updated to '+incident.severity_text())
 
     return False, None
 
 
-@__default_incident_command(["rename"], helptext="Rename the incident channel")
+@__default_incident_command(["rename"], helptext="[text]` - Rename the incident channel")
 def rename_incident(incident: Incident, user_id: str, message: str):
     try:
         comms_channel = CommsChannel.objects.get(incident=incident)
@@ -90,7 +92,7 @@ def rename_incident(incident: Incident, user_id: str, message: str):
 
 
 @__default_incident_command(
-    ["duration"], helptext="How long has this incident been running?"
+    ["duration"], helptext="` - How long has this incident been running?"
 )
 def set_duration(incident: Incident, user_id: str, message: str):
     duration = incident.duration()
@@ -101,7 +103,7 @@ def set_duration(incident: Incident, user_id: str, message: str):
     return True, None
 
 
-@__default_incident_command(["close"], helptext="Close this incident.")
+@__default_incident_command(["close"], helptext="` - Close this incident.")
 def close_incident(incident: Incident, user_id: str, message: str):
     comms_channel = CommsChannel.objects.get(incident=incident)
 
@@ -119,7 +121,7 @@ def close_incident(incident: Incident, user_id: str, message: str):
     return True, None
 
 
-@__default_incident_command(["action"], helptext="Log a follow up action")
+@__default_incident_command(["action"], helptext="[text]` - Log a follow up action")
 def set_action(incident: Incident, user_id: str, message: str):
     name = get_user_profile(user_id)["name"]
     action_reporter, _ = ExternalUser.objects.get_or_create_slack(
@@ -129,7 +131,7 @@ def set_action(incident: Incident, user_id: str, message: str):
     return True, None
 
 
-@__default_incident_command(["zoom"], helptext="Creates a zoom meeting")
+@__default_incident_command(["zoom"], helptext="` - Creates a zoom meeting")
 def create_zoom(incident: Incident, user_id: str, message: str):
     try:
         m = incident.zoom_meeting()
@@ -147,3 +149,10 @@ def create_zoom(incident: Incident, user_id: str, message: str):
     )
 
     return True, None
+
+@__default_incident_command(['mitigate'], helptext="[message]` - Change the status of the incident to mitigated")
+def mitigate_incident(incident: Incident, user_id: str, message: str):
+    incident.mitigated = True
+    incident.save()
+    return add_status_update(incident, user_id,'Status changed to Mitigated - '+ message)
+

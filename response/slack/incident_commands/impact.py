@@ -24,7 +24,7 @@ CHANGE_BUTTON_TEXT = "Change"
 ACCEPT_PROPOSED_TEXT = "Yes"
 
 
-@__default_incident_command(["impact"], helptext="Explain the impact of this")
+@__default_incident_command(["impact"], helptext="[text]` - Explain the impact of this")
 def update_impact(incident: Incident, user_id: str, message: str):
     # Easy case. No impact currently and one has been provided
     if message and not incident.impact:
