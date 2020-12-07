@@ -17,8 +17,9 @@ def get_help():
     get_help returns the help string for a command
     """
     rendered = "These are the available Zoom commands:\n"
+    help_command = settings.SLACK_SLASH_COMMAND
     for k in sorted(COMMAND_HELP.keys()):
-        rendered += f"`/incident {k} {COMMAND_HELP[k]}\n"
+        rendered += f"`/{help_command} {k} {COMMAND_HELP[k]}\n"
     return rendered
 
 
@@ -27,7 +28,7 @@ def get_create_help():
     get_create_help returns the help string for the main channel
     """
     rendered = (
-        "This is not an incident channel, from here, you should invoke `/%s create something is going bad`, to start an incident report."
+        "This is not a dedicated incident channel, from here, you should invoke `/%s create something is going bad`, to start an incident report."
         % settings.SLACK_SLASH_COMMAND
     )
     return rendered
