@@ -3,6 +3,7 @@ from datetime import datetime
 
 from response.core.models.incident import Incident
 from response.slack.decorators import ActionContext, action_handler
+from response.slack.decorators.incident_command import get_help
 from response.slack.dialog_builder import (Dialog, SelectFromUsers,
                                            SelectWithOptions, Text, TextArea)
 from response.slack.models import CommsChannel, HeadlinePost
@@ -29,6 +30,9 @@ def handle_create_comms_channel(ac: ActionContext):
     headline_post = HeadlinePost.objects.get(incident=ac.incident)
     headline_post.comms_channel = comms_channel
     headline_post.save()
+
+    comms_channel.post_in_channel(get_help())
+
 
 
 @action_handler(HeadlinePost.CREATE_ZOOM_MEETING_BUTTON)
