@@ -138,7 +138,7 @@ def handle_incident_command(command_name, message, thread_ts, channel_id, user_i
     try:
         if channel_id == settings.INCIDENT_CHANNEL_ID:
             logger.info('main incident channel')
-            settings.SLACK_CLIENT.send_message(channel_id, get_create_help())
+            settings.SLACK_CLIENT.send_ephemeral_message(channel_id, user_id, get_create_help())
             return None
         comms_channel = CommsChannel.objects.get(channel_id=channel_id)
         handled, response = command(comms_channel.incident, user_id, message)
@@ -153,7 +153,7 @@ def handle_incident_command(command_name, message, thread_ts, channel_id, user_i
 
     except CommsChannel.DoesNotExist:
         logger.error("No matching incident found for this channel")
-        settings.SLACK_CLIENT.send_message(comms_channel.channel_id, get_create_help())
+        settings.SLACK_CLIENT.send_ephemeral_message(channel_id, user_id, get_create_help())
     except Exception as e:
         logger.error(f"Error handling incident command {command_name} {message}: {e}")
         raise

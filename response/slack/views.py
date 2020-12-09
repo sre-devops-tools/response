@@ -6,13 +6,14 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from response.core.models.incident import Incident
+from response.slack.models.comms_channel import CommsChannel
 from response.slack.authentication import slack_authenticate
 from response.slack.cache import get_user_profile, update_user_cache
 from response.slack.decorators import (handle_action, handle_dialog,
                                        handle_event, handle_incident_command,
                                        handle_notifications)
 from response.slack.decorators.incident_command import (get_commands,
-                                                        get_create_help)
+                                                        get_create_help, get_help)
 from response.slack.dialog_builder import (Dialog, SelectFromUsers,
                                            SelectWithOptions, Text, TextArea)
 from response.slack.settings import (INCIDENT_CREATE_SLUG,
@@ -110,11 +111,27 @@ def slash_command(request):
         )
 
     elif command_name not in get_commands():
-        settings.SLACK_CLIENT.send_ephemeral_message(
-            channel_id,
-            user_id,
-            get_create_help(),
-        )
+        if channel_id == settings.INCIDENT_CHANNEL_ID:
+            settings.SLACK_CLIENT.send_ephemeral_message(
+                channel_id,
+                user_id,
+                get_create_help(),
+            )
+        else:
+            comms_channel = CommsChannel.objects.filter(channel_id=channel_id).first()
+            if comms_channel is not None:
+                settings.SLACK_CLIENT.send_ephemeral_message(
+                channel_id,
+                user_id,
+                get_help(),
+            )
+            else:
+                settings.SLACK_CLIENT.send_ephemeral_message(
+                channel_id,
+                user_id,
+                'This is not the incident channel, please head over #'+settings.INCIDENT_CHANNEL_NAME,
+            )
+
     else:
         handle_incident_command(
             command_name=command_name,

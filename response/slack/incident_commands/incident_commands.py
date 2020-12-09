@@ -21,7 +21,13 @@ logger = logging.getLogger(__name__)
 
 @__default_incident_command(["help"], helptext="` - Display a list of commands and usage")
 def send_help_text(incident: Incident, user_id: str, message: str):
-    return True, get_help()
+    comms_channel = CommsChannel.objects.get(incident=incident)
+    settings.SLACK_CLIENT.send_ephemeral_message(
+                comms_channel.channel_id,
+                user_id,
+                get_help(),
+            )
+    return True, None
 
 
 @__default_incident_command(
