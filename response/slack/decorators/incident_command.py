@@ -17,8 +17,9 @@ def get_help():
     get_help returns the help string for a command
     """
     rendered = "These are the available Zoom commands:\n"
+    help_command = settings.SLACK_SLASH_COMMAND
     for k in sorted(COMMAND_HELP.keys()):
-        rendered += f"`/incident {k} {COMMAND_HELP[k]}\n"
+        rendered += f"`/{help_command} {k} {COMMAND_HELP[k]}\n"
     return rendered
 
 
