@@ -46,7 +46,7 @@ def prompt_incident_report(sender, instance: Incident, **kwargs):
         )
         settings.SLACK_CLIENT.send_message(
             user_to_notify.external_id,
-            f"👋 Don't forget to fill out an incident report here: {doc_url}",
+            f"👋 Don't forget to create a post-mortem from here: {doc_url}",
         )
 
 
