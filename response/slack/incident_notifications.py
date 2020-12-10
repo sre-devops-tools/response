@@ -32,12 +32,12 @@ def remind_incident_lead(incident: Incident):
     except CommsChannel.DoesNotExist:
         pass
 
-@recurring_notification(interval_mins=60, max_notifications=10)
+@recurring_notification(interval_mins=30, max_notifications=10)
 def remind_update(incident: Incident):
     update = StatusUpdate.objects.filter(incident=incident).order_by("timestamp").first()
     if update is not None:
         if update.timestamp < datetime.datetime.now()-datetime.timedelta(minutes=60):
-            logger.info("The last update is older than 60 minutes")
+            logger.info("The last update was over 1h ago")
             try:
                 comms_channel = CommsChannel.objects.get(incident=incident)
                 if not incident.is_closed():
