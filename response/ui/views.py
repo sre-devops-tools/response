@@ -34,7 +34,8 @@ def export_to_confluence(request: HttpRequest, incident_id: str):
     f = open(file_path, "r")
     content_file = f.read()
     content_file = content_file.replace("%SEVERITY%", incident.severity_text())
-    content_file = content_file.replace("%IMPACT%", incident.impact)
+    if incident.impact is not None:
+        content_file = content_file.replace("%IMPACT%", incident.impact)
     content_file = content_file.replace(
         "%START_TIME%", incident.start_time.strftime("%Y-%m-%d %H:%M:%S") + " UTC"
     )
