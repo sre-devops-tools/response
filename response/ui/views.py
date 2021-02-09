@@ -36,6 +36,8 @@ def export_to_confluence(request: HttpRequest, incident_id: str):
     content_file = content_file.replace("%SEVERITY%", incident.severity_text())
     if incident.impact is not None:
         content_file = content_file.replace("%IMPACT%", incident.impact)
+    else:
+        content_file = content_file.replace("%IMPACT%", '')
     content_file = content_file.replace(
         "%START_TIME%", incident.start_time.strftime("%Y-%m-%d %H:%M:%S") + " UTC"
     )
@@ -48,7 +50,10 @@ def export_to_confluence(request: HttpRequest, incident_id: str):
             "export", ""
         ),
     )
-    content_file = content_file.replace("%SUMMARY%", incident.summary)
+    if incident.summary is None:
+        content_file = content_file.replace("%SUMMARY%", '')
+    else:
+        content_file = content_file.replace("%SUMMARY%", incident.summary)
 
     events = PinnedMessage.objects.filter(incident=incident).order_by("timestamp")
     updates = StatusUpdate.objects.filter(incident=incident).order_by("timestamp")
