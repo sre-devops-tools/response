@@ -59,7 +59,7 @@
           </thead>
           <tbody>
             {% for incident in incidents %}
-            {% if incident.status_text|upper == 'RESOLVED' %}
+            {% if incident.status_text|upper == 'RESOLVED' or incident.status_text|upper == 'REPORTED'%}
             {% include 'incident_row.html' %}
             {% endif %}
             {% endfor %}
