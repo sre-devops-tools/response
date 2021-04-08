@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 psycopg2-binary = "==2.8.6"
-Django = "==3.1.1"
+Django = "==3.1.8"
 python-dotenv = "*"
 slackclient = "~=1.3"
 isort = "*"
