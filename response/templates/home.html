@@ -10,6 +10,24 @@
 
 {% block content %}
 <div class="row">
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box bg-red">
+      <span class="info-box-icon"><i class="fas fa-exclamation-triangle"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">This week Incident(s)</span>
+        <span class="info-box-number">{{incidents_this_week.count}}</span>
+        <span class="progress-description">
+          Last week: {{incidents_last_week.count}}
+        </span>
+      </div>
+     
+
+      <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+  </div>
+</div>
+<div class="row">
   <div class="col-12">
     <div class="card">
       <div class="card-header">

@@ -6,6 +6,8 @@ import logging
 import requests
 from atlassian import Confluence
 from django.conf import settings
+from datetime import timedelta
+from django.utils import timezone
 from django.http import Http404, HttpRequest
 from django.shortcuts import redirect, render
 from django.template import loader
@@ -19,7 +21,12 @@ logger = logging.getLogger(__name__)
 @response_login_required
 def home(request: HttpRequest):
     incidents = Incident.objects.all().order_by("-start_time")
-    return render(request, template_name="home.html", context={"incidents": incidents})
+    some_day_last_week = timezone.now().date() - timedelta(days=7)
+    monday_of_last_week = some_day_last_week - timedelta(days=(some_day_last_week.isocalendar()[2] - 1))
+    monday_of_this_week = monday_of_last_week + timedelta(days=7)
+    incidents_last_week = Incident.objects.filter(report_time__gte=monday_of_last_week, report_time__lt=monday_of_this_week)
+    incidents_this_week = Incident.objects.filter(report_time__gte=monday_of_this_week)
+    return render(request, template_name="home.html", context={"incidents": incidents,"incidents_last_week": incidents_last_week, "incidents_this_week":incidents_this_week})
 
 
 @response_login_required
